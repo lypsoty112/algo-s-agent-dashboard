@@ -1,14 +1,11 @@
+import { Suspense } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { PageTitle } from "@/components/page-title";
 import { Separator } from "@/components/ui/separator";
 import { cookies } from "next/headers";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+async function DashboardShell({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies();
   const sidebarState = cookieStore.get("sidebar_state")?.value;
   const defaultOpen = sidebarState !== "false";
@@ -25,5 +22,17 @@ export default async function DashboardLayout({
         <main className="px-4 py-8 sm:px-6 lg:px-8">{children}</main>
       </SidebarInset>
     </SidebarProvider>
+  );
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <Suspense>
+      <DashboardShell>{children}</DashboardShell>
+    </Suspense>
   );
 }

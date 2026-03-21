@@ -29,9 +29,9 @@ async function getPositionsPageData() {
       ? ordersResult.value.slice().reverse()
       : [];
   const tradeRecords = computeTradeRecords(alpacaOrders);
-  // Sort newest-closed first and cap at 25
+  // Sort newest-closed first
   tradeRecords.sort((a, b) => b.closedAt.getTime() - a.closedAt.getTime());
-  const recentTrades = tradeRecords.slice(0, 25);
+  const recentTrades = tradeRecords;
 
   // Compute summary values
   const totalMarketValue =

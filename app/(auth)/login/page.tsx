@@ -208,7 +208,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left — login panel */}
-      <div className="flex flex-col justify-center items-center w-full lg:w-[42%] bg-[#f5f3ef] px-8 py-12">
+      <div className="flex flex-col justify-center items-center w-full lg:w-[42%] bg-background px-8 py-12">
         <div className="w-full max-w-sm">
           {/* Logo */}
           <div className="flex items-center gap-3 mb-10">

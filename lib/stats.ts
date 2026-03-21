@@ -158,6 +158,135 @@ export function computeWinRateFromOrders(
   };
 }
 
+// ---------------------------------------------------------------------------
+// Completed trade records from raw Alpaca orders (FIFO lot matching)
+// ---------------------------------------------------------------------------
+// Same algorithm as computeWinRateFromOrders, but returns one record per
+// completed round-trip trade with symbol, P&L, and open/close timestamps.
+
+export interface CompletedTradeRecord {
+  symbol: string;
+  pnl: number;
+  openedAt: Date;
+  closedAt: Date;
+  holdingDays: number;
+}
+
+export function computeTradeRecords(
+  rawOrders: {
+    symbol: string;
+    side: string;
+    status: string;
+    filled_qty: string;
+    filled_avg_price: string | null;
+    filled_at: string | null;
+  }[],
+): CompletedTradeRecord[] {
+  const orders = rawOrders
+    .filter(
+      (o) =>
+        o.status === "filled" &&
+        o.filled_at !== null &&
+        parseFloat(o.filled_qty || "0") > 0,
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.filled_at!).getTime() - new Date(b.filled_at!).getTime(),
+    );
+
+  const bySymbol = new Map<string, typeof orders>();
+  for (const o of orders) {
+    if (!bySymbol.has(o.symbol)) bySymbol.set(o.symbol, []);
+    bySymbol.get(o.symbol)!.push(o);
+  }
+
+  interface Lot {
+    qty: number;
+    price: number;
+    openedAt: Date;
+  }
+
+  const completed: CompletedTradeRecord[] = [];
+
+  for (const [symbol, symOrders] of bySymbol.entries()) {
+    let longLots: Lot[] = [];
+    let shortLots: Lot[] = [];
+    let currentPnl = 0;
+    let currentOpenedAt: Date | null = null;
+
+    const recordTrade = (closedAt: Date) => {
+      if (currentOpenedAt) {
+        const holdingDays = Math.round(
+          (closedAt.getTime() - currentOpenedAt.getTime()) / (1000 * 60 * 60 * 24),
+        );
+        completed.push({ symbol, pnl: currentPnl, openedAt: currentOpenedAt, closedAt, holdingDays });
+      }
+      currentPnl = 0;
+      currentOpenedAt = null;
+    };
+
+    const drainLots = (
+      lots: Lot[],
+      qty: number,
+      closePrice: number,
+      isLong: boolean,
+    ): number => {
+      let remaining = qty;
+      while (remaining > 1e-8 && lots.length > 0) {
+        const lot = lots[0];
+        const fill = Math.min(remaining, lot.qty);
+        currentPnl += isLong
+          ? (closePrice - lot.price) * fill
+          : (lot.price - closePrice) * fill;
+        remaining -= fill;
+        lot.qty -= fill;
+        if (lot.qty < 1e-8) lots.shift();
+      }
+      return remaining;
+    };
+
+    for (const order of symOrders) {
+      const qty = parseFloat(order.filled_qty);
+      const price = parseFloat(order.filled_avg_price ?? "0");
+      const filledAt = new Date(order.filled_at!);
+      if (qty <= 0 || price <= 0) continue;
+
+      if (order.side === "buy") {
+        if (shortLots.length > 0) {
+          const leftover = drainLots(shortLots, qty, price, false);
+          if (shortLots.length === 0) {
+            recordTrade(filledAt);
+            if (leftover > 1e-8) {
+              longLots.push({ qty: leftover, price, openedAt: filledAt });
+              currentOpenedAt = filledAt;
+            }
+          }
+        } else {
+          if (!currentOpenedAt) currentOpenedAt = filledAt;
+          longLots.push({ qty, price, openedAt: filledAt });
+        }
+      } else {
+        if (longLots.length > 0) {
+          const leftover = drainLots(longLots, qty, price, true);
+          if (longLots.length === 0) {
+            recordTrade(filledAt);
+            if (leftover > 1e-8) {
+              shortLots.push({ qty: leftover, price, openedAt: filledAt });
+              currentOpenedAt = filledAt;
+            }
+          }
+        } else {
+          if (!currentOpenedAt) currentOpenedAt = filledAt;
+          shortLots.push({ qty, price, openedAt: filledAt });
+        }
+      }
+    }
+  }
+
+  console.log(`[stats] computeTradeRecords — completed trades: ${completed.length}`);
+  return completed;
+}
+
 const RISK_FREE_DAILY = 0.045 / 252;
 
 export function computeReturns(equities: number[]): number[] {

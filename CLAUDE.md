@@ -47,7 +47,7 @@ app/
     portfolio/route.ts           # Alpaca equity history, revalidate 300s
     benchmark/route.ts           # SPY + QQQ via Alpaca, revalidate 300s
     positions/route.ts           # Live positions (Alpaca) + thesis (DB), revalidate 60s
-    trades/route.ts              # Closed trade history (DB), revalidate 60s
+    trades/route.ts              # Trade rationale/thesis from DB (paginated, for Positions tab) — NOT for performance stats; use Alpaca orders for those
     knowledge-base/route.ts      # KB entries, paginated + filtered, revalidate 60s
     strategies/route.ts          # Strategies incl. soft-deleted, revalidate 60s
 ```
@@ -72,8 +72,20 @@ Single-password auth via `DASHBOARD_PASSWORD` env var. `middleware.ts` (or `prox
 
 ## Data Source Rules
 
-- **Portfolio & orders → Alpaca first.** Equity, positions, order history, win rate, last trade date — all come from the Alpaca API. Never use the database as the source of truth for trading activity.
-- **LLM memory → database only.** Knowledge base entries, strategies, and agent/flow run records come exclusively from Postgres via Prisma. Alpaca has no knowledge of these.
+> **The single most common mistake: using `trade_history` (DB) for trading stats. Don't. Use Alpaca.**
+
+| Data | Source | How |
+|---|---|---|
+| Equity curve | Alpaca | `getPortfolioHistory()` |
+| Open positions | Alpaca | `getPositions()` |
+| Closed trades — P&L, win rate, holding period | Alpaca | `getRecentOrders()` → `computeTradeRecords()` / `computeWinRateFromOrders()` in `lib/stats.ts` |
+| Last trade date | Alpaca | first `filled_at` from `getRecentOrders()` |
+| Knowledge base entries | DB (Prisma) | `db.knowledgeBase` |
+| Strategies | DB (Prisma) | `db.strategy` |
+| Trade rationale / thesis text | DB (Prisma) | `db.tradeHistory` — **agent notes only, not trading activity** |
+| Flow / agent run logs | DB (Prisma) | `db.flowRun`, `db.agentRun` |
+
+**`trade_history` is LLM memory, not a trade ledger.** The agent writes its rationale and post-trade notes there. It does NOT reliably contain P&L, filled quantities, or timestamps suitable for performance stats. Always use Alpaca order data for anything quantitative (P&L, win rate, holding periods, scatter plots, stat cards).
 
 ## Critical Implementation Rules
 

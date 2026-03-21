@@ -21,6 +21,7 @@ type EquityCurveProps = {
   portfolio: { timestamps: number[]; equities: number[] }
   spy: { timestamps: number[]; values: number[] } | null
   qqq: { timestamps: number[]; values: number[] } | null
+  defaultRange?: TimeRange
 }
 
 type ChartPoint = {
@@ -134,8 +135,8 @@ function CustomTooltip({ active, payload, label }: TooltipProps) {
   )
 }
 
-export function EquityCurve({ portfolio, spy, qqq }: EquityCurveProps) {
-  const [timeRange, setTimeRange] = useState<TimeRange>("1Y")
+export function EquityCurve({ portfolio, spy, qqq, defaultRange = "1Y" }: EquityCurveProps) {
+  const [timeRange, setTimeRange] = useState<TimeRange>(defaultRange)
 
   const chartData = useMemo(() => {
     return buildChartData(portfolio, spy, qqq, getCutoffTimestamp(timeRange))

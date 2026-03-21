@@ -14,6 +14,15 @@ export async function proxy(request: NextRequest) {
 
   // Allow login page and auth API through
   if (pathname === "/login" || pathname.startsWith("/api/auth/")) {
+    if (pathname === "/login") {
+      const token = request.cookies.get(COOKIE_NAME)?.value;
+      if (token) {
+        try {
+          await jwtVerify(token, getKey());
+          return NextResponse.redirect(new URL("/", request.url));
+        } catch { /* invalid token, show login */ }
+      }
+    }
     return NextResponse.next();
   }
 

@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { LayoutDashboard, TrendingUp, Briefcase, BookOpen, Lightbulb } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { LayoutDashboard, TrendingUp, Briefcase, BookOpen, Lightbulb, LogOut } from "lucide-react";
 import logo from "@/images/algo-s-logo.png";
 import {
   Sidebar,
@@ -27,7 +27,13 @@ const navItems = [
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { isMobile, setOpenMobile } = useSidebar();
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.push("/login");
+  }
 
   function handleNavClick() {
     if (isMobile) setOpenMobile(false);
@@ -82,6 +88,12 @@ export function AppSidebar() {
             <SidebarMenuButton className="pointer-events-none">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
               <span className="text-sm text-muted-foreground">Live</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton onClick={handleLogout} tooltip="Log out">
+              <LogOut />
+              <span className="text-sm text-muted-foreground">Log out</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

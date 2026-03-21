@@ -171,9 +171,9 @@ export function EquityCurve({ portfolio, spy, qqq }: EquityCurveProps) {
           margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
         >
           <CartesianGrid
-            strokeDasharray="3 3"
+            horizontal
+            vertical={false}
             stroke="hsl(var(--border))"
-            strokeOpacity={0.5}
           />
           <XAxis
             dataKey="date"

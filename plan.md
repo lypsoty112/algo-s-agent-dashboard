@@ -220,7 +220,7 @@ algo-s-dashboard/
 │   │       └── login-form.tsx        # ✅ Client component — password form
 │   ├── (dashboard)/
 │   │   ├── layout.tsx                # ✅ Dashboard shell (placeholder nav)
-│   │   ├── page.tsx                  # ✅ Overview tab (placeholder)
+│   │   ├── page.tsx                  # ✅ Overview tab
 │   │   ├── performance/page.tsx      # ✅ Placeholder
 │   │   ├── positions/page.tsx        # ✅ Placeholder
 │   │   ├── knowledge-base/page.tsx   # ✅ Placeholder
@@ -237,7 +237,7 @@ algo-s-dashboard/
 ├── components/
 │   ├── ui/                           # ✅ button, card, input, label (shadcn/ui)
 │   ├── charts/
-│   │   ├── equity-curve.tsx          # ⬜
+│   │   ├── equity-curve.tsx          # ✅
 │   │   ├── trade-scatter.tsx         # ⬜
 │   │   └── monthly-returns.tsx       # ⬜
 │   ├── kb/
@@ -321,7 +321,7 @@ algo-s-dashboard/
 | 2 | ✅ | Auth (`proxy.ts` + split-screen login) | Login shows 6 live system stats (incl. last agent run + agents/30d) |
 | 3 | ✅ | API routes + `lib/stats.ts` + `lib/alpaca.ts` | All routes built + test suite; `flow_runs` / `agent_runs` added to Prisma schema |
 | 4 | ✅ | Nav + layout shell | Sidebar navigation (shadcn Sidebar, inset variant, collapsible icon) |
-| 5 | ⬜ | Overview tab | First real data on screen, validates all integrations |
+| 5 | ✅ | Overview tab | KPI strip, equity curve (normalized to 100, SPY/QQQ benchmarks), system snapshot. Win rate from Alpaca FIFO order matching. |
 | 6 | ⬜ | Performance tab | Depends on `lib/stats.ts` being solid |
 | 7 | ⬜ | Positions tab | Builds the drawer component (reused in steps 8–9) |
 | 8 | ⬜ | Knowledge Base tab | Heaviest UI tab |

@@ -244,7 +244,7 @@ algo-s-dashboard/
 │   │   └── entry-drawer.tsx          # ⬜ Shared drawer: KB + Strategies + Positions
 │   ├── positions/
 │   │   └── position-drawer.tsx       # ⬜
-│   └── nav.tsx                       # ⬜ Top nav + last-updated badge
+│   └── app-sidebar.tsx               # ✅ Sidebar nav (shadcn Sidebar, inset + collapsible icon)
 ├── lib/
 │   ├── auth.ts                       # ✅ signToken / verifyToken (jose HS256, 7-day)
 │   ├── db.ts                         # ✅ PrismaClient singleton + safeQuery helper
@@ -320,7 +320,7 @@ algo-s-dashboard/
 | 1 | ✅ | Scaffold + Prisma + env | Prisma 7 requires adapter-pg; no `url` in schema.prisma |
 | 2 | ✅ | Auth (`proxy.ts` + split-screen login) | Login shows 6 live system stats (incl. last agent run + agents/30d) |
 | 3 | ✅ | API routes + `lib/stats.ts` + `lib/alpaca.ts` | All routes built + test suite; `flow_runs` / `agent_runs` added to Prisma schema |
-| 4 | ⬜ | Nav + layout shell | Confirms routing end to end |
+| 4 | ✅ | Nav + layout shell | Sidebar navigation (shadcn Sidebar, inset variant, collapsible icon) |
 | 5 | ⬜ | Overview tab | First real data on screen, validates all integrations |
 | 6 | ⬜ | Performance tab | Depends on `lib/stats.ts` being solid |
 | 7 | ⬜ | Positions tab | Builds the drawer component (reused in steps 8–9) |

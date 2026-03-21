@@ -216,7 +216,7 @@ algo-s-dashboard/
 ├── app/
 │   ├── (auth)/
 │   │   └── login/
-│   │       ├── page.tsx              # ✅ Split-screen login — server component, fetches live stats
+│   │       ├── page.tsx              # ✅ Split-screen login — 6-card stats panel (incl. agent run metrics)
 │   │       └── login-form.tsx        # ✅ Client component — password form
 │   ├── (dashboard)/
 │   │   ├── layout.tsx                # ✅ Dashboard shell (placeholder nav)
@@ -227,12 +227,13 @@ algo-s-dashboard/
 │   │   └── strategies/page.tsx       # ✅ Placeholder
 │   └── api/
 │       ├── auth/login/route.ts       # ✅ POST — verifies password, sets JWT cookie
-│       ├── portfolio/route.ts        # ⬜ Equity curve + history (Alpaca), revalidate: 300
-│       ├── positions/route.ts        # ⬜ Live positions + thesis (Alpaca + DB)
-│       ├── trades/route.ts           # ⬜ Closed trade history (DB)
-│       ├── benchmark/route.ts        # ⬜ SPY + QQQ (Alpaca Data), revalidate: 300
-│       ├── knowledge-base/route.ts   # ⬜ KB entries (DB, paginated + filtered)
-│       └── strategies/route.ts       # ⬜ Strategies (DB, inc. soft-deleted)
+│       ├── portfolio/route.ts        # ✅ Equity curve + history (Alpaca), revalidate: 300
+│       ├── positions/route.ts        # ✅ Live positions + thesis (Alpaca + DB)
+│       ├── trades/route.ts           # ✅ Closed trade history (DB)
+│       ├── benchmark/route.ts        # ✅ SPY + QQQ (Alpaca Data), revalidate: 300
+│       ├── knowledge-base/route.ts   # ✅ KB entries (DB, paginated + filtered)
+│       ├── strategies/route.ts       # ✅ Strategies (DB, inc. soft-deleted)
+│       └── __tests__/                # ✅ Route-level test suite
 ├── components/
 │   ├── ui/                           # ✅ button, card, input, label (shadcn/ui)
 │   ├── charts/
@@ -247,12 +248,14 @@ algo-s-dashboard/
 ├── lib/
 │   ├── auth.ts                       # ✅ signToken / verifyToken (jose HS256, 7-day)
 │   ├── db.ts                         # ✅ PrismaClient singleton + safeQuery helper
-│   ├── alpaca.ts                     # ⬜ Alpaca API client
-│   └── stats.ts                      # ⬜ Sharpe, Sortino, drawdown — server-side only
+│   ├── alpaca.ts                     # ✅ Alpaca API client
+│   ├── stats.ts                      # ✅ Sharpe, Sortino, drawdown — server-side only
+│   └── __tests__/                    # ✅ Unit tests for stats + alpaca
 ├── proxy.ts                          # ✅ Auth gate (Next.js 16 — replaces middleware.ts)
 ├── prisma.config.ts                  # ✅ Prisma 7 datasource config (DATABASE_URL)
 ├── prisma/
-│   └── schema.prisma                 # ✅ trade_history, knowledge_base, strategies models
+│   └── schema.prisma                 # ✅ flows, knowledge_base, strategies, trade_history,
+│                                     #    flow_runs, agent_runs (modeling only — no migrations)
 └── .env                              # DASHBOARD_PASSWORD, DATABASE_URL, APCA_*, TZ
 ```
 
@@ -315,8 +318,8 @@ algo-s-dashboard/
 | Step | Status | What | Notes |
 |---|---|---|---|
 | 1 | ✅ | Scaffold + Prisma + env | Prisma 7 requires adapter-pg; no `url` in schema.prisma |
-| 2 | ✅ | Auth (`proxy.ts` + split-screen login) | Login shows live system stats on right panel |
-| 3 | ⬜ | API routes + `lib/stats.ts` | All data logic before touching UI |
+| 2 | ✅ | Auth (`proxy.ts` + split-screen login) | Login shows 6 live system stats (incl. last agent run + agents/30d) |
+| 3 | ✅ | API routes + `lib/stats.ts` + `lib/alpaca.ts` | All routes built + test suite; `flow_runs` / `agent_runs` added to Prisma schema |
 | 4 | ⬜ | Nav + layout shell | Confirms routing end to end |
 | 5 | ⬜ | Overview tab | First real data on screen, validates all integrations |
 | 6 | ⬜ | Performance tab | Depends on `lib/stats.ts` being solid |

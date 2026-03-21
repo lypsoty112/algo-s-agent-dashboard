@@ -1,48 +1,159 @@
+// Prisma schema for algo-s-agents. See /docs/database.md and architecture.md.
+
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-model trade_history {
-  id                  Int       @id @default(autoincrement())
-  symbol              String
-  direction           String?
-  entry_price         Float?
-  exit_price          Float?
-  entry_date          DateTime?
-  exit_date           DateTime?
-  status              String?
-  thesis              String?
-  alpaca_order_id     String?
-  pnl                 Float?
-  pnl_pct             Float?
-  holding_period_days Float?
-  size_pct            Float?
-  current_price       Float?
-  created_at          DateTime? @default(now())
-  updated_at          DateTime? @updatedAt
+// --- Flows (Section 2 & 5): flowStarter reads due flows; schedule, starter agent/prompt live in info JSON
+model Flow {
+  id         String    @id @default(uuid())
+  name       String    @map("name")
+  info       Json      @map("info") // schedule, starterAgent, starterPrompt, etc.
+  createdBy  String    @map("created_by") // "system" or agent ID
+  enabled    Boolean   @default(true)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  flowRuns   FlowRun[]
+
+  @@map("flows")
 }
 
-model knowledge_base {
-  id          Int       @id @default(autoincrement())
-  category    String?
-  subject     String?
-  description String?
-  content     String?
-  created_at  DateTime? @default(now())
-  updated_at  DateTime? @updatedAt
+// --- Knowledge base (Section 5): Memory Manager Agent is sole writer
+model KnowledgeBase {
+  id          String    @id @default(uuid())
+  category    KnowledgeBaseCategory
+  subject     String    @db.Text
+  description String    @db.Text // Standardized summary for text search
+  content     String    @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  @@map("knowledge_base")
 }
 
-model strategies {
-  id          Int       @id @default(autoincrement())
-  type        String?
-  subject     String?
-  description String?
-  content     String?
-  created_at  DateTime? @default(now())
-  updated_at  DateTime? @updatedAt
-  deleted_at  DateTime?
+enum KnowledgeBaseCategory {
+  stock_specific
+  general_market
+  industry
+  mistakes
+  system
+  other
+}
+
+// --- Strategies (Section 5): one active record per strategy type
+model Strategy {
+  id          String           @id @default(uuid())
+  type        StrategyType
+  subject     String           @db.Text
+  description String           @db.Text
+  content     String           @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at")
+  deletedAt   DateTime?       @map("deleted_at")
+
+  @@map("strategies")
+}
+
+// Strategies are durable prescriptive playbooks (what TO do), not observations.
+// Every strategy must contain entry/exit criteria, risk parameters, position sizing,
+// and holding period — those are required components, not a separate type.
+enum StrategyType {
+  stock          // Thesis and rules for a specific stock
+  industry       // Thesis and rules for an industry or sector
+  portfolio      // Overall portfolio construction and allocation rules
+  risk_management // Risk limits, drawdown rules, exposure constraints
+  other          // Catch-all for strategies that don't fit the above
+}
+
+// --- Trade history (Section 5): richest record, rationale for Review Agent
+model TradeHistory {
+  id              String           @id @default(uuid())
+  alpacaOrderId   String?          @map("alpaca_order_id") @db.Text
+  symbol          String           @db.Text
+  orderType       TradeOrderType   @map("order_type")          // buy | sell (side)
+  alpacaOrderType AlpacaOrderType? @map("alpaca_order_type")  // market, limit, stop, etc.
+  status          TradeStatus?     @map("status")              // submitted, filled, cancelled, modified, etc.
+  quantity        Decimal?         @db.Decimal
+  notional        Decimal?         @db.Decimal
+  price           Decimal?         @db.Decimal
+  limitPrice      Decimal?         @map("limit_price") @db.Decimal
+  stopPrice       Decimal?         @map("stop_price") @db.Decimal
+  filledQty       Decimal?         @map("filled_qty") @db.Decimal
+  filledAvgPrice  Decimal?         @map("filled_avg_price") @db.Decimal
+  openedAt        DateTime         @map("opened_at")
+  closedAt        DateTime?        @map("closed_at")
+  outcomePnl      Decimal?         @map("outcome_pnl") @db.Decimal
+  rationale       String           @db.Text
+  flowId          String?          @map("flow_id")
+  parentOrderId   String?          @map("parent_order_id")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  deletedAt       DateTime?        @map("deleted_at")
+
+  @@map("trade_history")
+}
+
+enum TradeOrderType {
+  buy
+  sell
+}
+
+enum TradeStatus {
+  submitted
+  partially_filled
+  filled
+  cancelled
+  expired
+  modified
+  rejected
+}
+
+enum AlpacaOrderType {
+  market
+  limit
+  stop
+  stop_limit
+  trailing_stop
+}
+
+// --- Flow runs: execution log per flow invocation
+model FlowRun {
+  id        String        @id @default(uuid())
+  flowId    String        @map("flow_id")
+  flow      Flow          @relation(fields: [flowId], references: [id])
+  status    FlowRunStatus
+  duration  Int?          // milliseconds
+  error     String?       @db.Text
+  createdAt DateTime      @default(now()) @map("created_at")
+
+  agentRuns AgentRun[]
+
+  @@map("flow_runs")
+}
+
+enum FlowRunStatus {
+  pending
+  running
+  completed
+  failed
+}
+
+// --- Agent runs: per-agent execution log, child of flow_run
+model AgentRun {
+  id            String   @id @default(uuid())
+  flowRunId     String   @map("flow_run_id")
+  flowRun       FlowRun  @relation(fields: [flowRunId], references: [id])
+  tokens        Int?
+  stepCount     Int?     @map("step_count")
+  input         String?  @db.Text
+  outputSummary String?  @map("output_summary") @db.Text
+  callerChain   Json?    @map("caller_chain")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("agent_runs")
 }

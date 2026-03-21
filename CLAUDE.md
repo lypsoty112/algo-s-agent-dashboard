@@ -98,3 +98,5 @@ See `.env.example`. Required:
 ## Prisma Schema
 
 `prisma/schema.prisma` is copied/symlinked from the `algo-s-agents` repo. Don't modify the schema here — it's owned by the agent system.
+
+**Never run migrations.** Prisma is used here for type generation and query building only. The database is managed entirely by the `algo-s-agents` system. Never run `prisma migrate`, `prisma db push`, `prisma db execute`, or any other command that writes to or alters the database schema.

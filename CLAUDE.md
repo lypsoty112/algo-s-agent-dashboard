@@ -73,6 +73,7 @@ Single-password auth via `DASHBOARD_PASSWORD` env var. `middleware.ts` (or `prox
 ## Critical Implementation Rules
 
 - **Prisma is read-only.** Never call mutating Prisma methods. Use a read-only Postgres user.
+- **Schema resilience:** The database schema is owned by `algo-s-agents` and can change at any time. All Prisma queries must be wrapped in try/catch. Missing columns or changed types should degrade gracefully (show `--` or "Data unavailable") rather than crash the dashboard. Never assume a column exists at the type level without handling the case where the query fails at runtime.
 - **Benchmark normalization:** Normalize both equity and SPY/QQQ to 100 at `t=0`. Never plot raw equity vs raw index price.
 - **Stats computation:** `getPortfolioHistory` returns equity values, not returns. Compute daily returns as `(equity[i] - equity[i-1]) / equity[i-1]` before calculating Sharpe/Sortino. All stats stay in `lib/stats.ts` (server-side only).
 - **Thesis JOIN:** `trade_history` may have multiple rows per symbol (scaled entries). Use the most recent non-cancelled row as the current thesis for open positions.

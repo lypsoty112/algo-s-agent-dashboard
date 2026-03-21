@@ -1,13 +1,11 @@
 // For adding custom fonts with other frameworks, see:
 // https://tailwindcss.com/docs/font-family
 import type { Metadata } from "next";
-import { DM_Sans, Noto_Serif_Georgian, DM_Mono } from "next/font/google";
+import { DM_Sans, Noto_Serif_Georgian, DM_Mono, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const fontSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const fontSerif = Noto_Serif_Georgian({
   subsets: ["latin"],
@@ -31,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}>
+    <html lang="en" className={cn("font-sans", geist.variable)}>
+      <body className={`${geist.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}>
         {children}
       </body>
     </html>

@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model trade_history {
+  id                  Int       @id @default(autoincrement())
+  symbol              String
+  direction           String?
+  entry_price         Float?
+  exit_price          Float?
+  entry_date          DateTime?
+  exit_date           DateTime?
+  status              String?
+  thesis              String?
+  alpaca_order_id     String?
+  pnl                 Float?
+  pnl_pct             Float?
+  holding_period_days Float?
+  size_pct            Float?
+  current_price       Float?
+  created_at          DateTime? @default(now())
+  updated_at          DateTime? @updatedAt
+}
+
+model knowledge_base {
+  id          Int       @id @default(autoincrement())
+  category    String?
+  subject     String?
+  description String?
+  content     String?
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @updatedAt
+}
+
+model strategies {
+  id          Int       @id @default(autoincrement())
+  type        String?
+  subject     String?
+  description String?
+  content     String?
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @updatedAt
+  deleted_at  DateTime?
+}

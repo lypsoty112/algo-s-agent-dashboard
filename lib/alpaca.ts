@@ -40,6 +40,16 @@ export interface AlpacaBar {
 	v: number;
 }
 
+export interface AlpacaOrder {
+	id: string;
+	symbol: string;
+	side: "buy" | "sell";
+	status: string;
+	filled_qty: string;
+	filled_avg_price: string | null;
+	filled_at: string | null;
+}
+
 async function alpacaFetch<T>(
 	base: "trading" | "data",
 	path: string,
@@ -118,6 +128,16 @@ export async function getPortfolioHistory(params: {
 		"/v2/account/portfolio/history",
 		queryParams,
 	);
+}
+
+export async function getRecentOrders(limit = 200): Promise<AlpacaOrder[]> {
+	console.log("[alpaca] getRecentOrders()", { limit });
+	// direction=desc → newest first; we reverse in the caller for chronological order
+	return alpacaFetch<AlpacaOrder[]>("trading", "/v2/orders", {
+		status: "closed",
+		limit: String(limit),
+		direction: "desc",
+	});
 }
 
 export async function getClosedOrdersCount(after?: string): Promise<number> {

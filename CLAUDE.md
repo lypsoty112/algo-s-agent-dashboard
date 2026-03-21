@@ -70,6 +70,11 @@ Single-password auth via `DASHBOARD_PASSWORD` env var. `middleware.ts` (or `prox
 - **`components/nav.tsx`** — top nav with last-updated badge (stale data indicator)
 - Skeleton loaders (not spinners) for loading states; every list/table has a designed empty state
 
+## Data Source Rules
+
+- **Portfolio & orders → Alpaca first.** Equity, positions, order history, win rate, last trade date — all come from the Alpaca API. Never use the database as the source of truth for trading activity.
+- **LLM memory → database only.** Knowledge base entries, strategies, and agent/flow run records come exclusively from Postgres via Prisma. Alpaca has no knowledge of these.
+
 ## Critical Implementation Rules
 
 - **Prisma is read-only.** Never call mutating Prisma methods. Use a read-only Postgres user.

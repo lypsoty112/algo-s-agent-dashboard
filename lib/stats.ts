@@ -1,5 +1,163 @@
 // Server-side only. No DB/API access.
 
+// ---------------------------------------------------------------------------
+// Win rate from raw Alpaca orders (FIFO lot matching)
+// ---------------------------------------------------------------------------
+//
+// Handles:
+//   • Long trades  (buy → sell)
+//   • Short trades (sell → buy)
+//   • Scaling in/out (multiple orders on the same side before closing)
+//   • Mixed direction (sell excess beyond a long → opens short in one pass)
+//
+// A "trade" is one complete round trip: position opens, then fully returns to flat.
+// Partial closes accumulate P&L; the trade is only recorded when the position
+// reaches exactly zero shares.
+//
+// Limitation: orders opened *before* the 200-order window may look like naked
+// openers for the opposite direction.  Acceptable for a 200-order look-back.
+
+export interface WinRateResult {
+  wins: number;
+  losses: number;
+  totalTrades: number;
+  winRate: number | null; // null when no completed trades found
+}
+
+export function computeWinRateFromOrders(
+  rawOrders: {
+    symbol: string;
+    side: string;
+    status: string;
+    filled_qty: string;
+    filled_avg_price: string | null;
+    filled_at: string | null;
+  }[],
+): WinRateResult {
+  // Only fully-filled orders, sorted oldest → newest
+  const orders = rawOrders
+    .filter(
+      (o) =>
+        o.status === "filled" &&
+        o.filled_at !== null &&
+        parseFloat(o.filled_qty || "0") > 0,
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.filled_at!).getTime() - new Date(b.filled_at!).getTime(),
+    );
+
+  // Group by symbol
+  const bySymbol = new Map<string, typeof orders>();
+  for (const o of orders) {
+    if (!bySymbol.has(o.symbol)) bySymbol.set(o.symbol, []);
+    bySymbol.get(o.symbol)!.push(o);
+  }
+
+  interface Lot {
+    qty: number;
+    price: number;
+  }
+  interface CompletedTrade {
+    realizedPnl: number;
+    totalInvested: number; // total capital committed to the opening leg
+  }
+
+  const completed: CompletedTrade[] = [];
+
+  for (const symOrders of bySymbol.values()) {
+    let longLots: Lot[] = []; // open long lots (FIFO)
+    let shortLots: Lot[] = []; // open short lots (FIFO)
+    let currentPnl = 0;
+    let totalInvested = 0;
+
+    const recordTrade = () => {
+      completed.push({ realizedPnl: currentPnl, totalInvested });
+      currentPnl = 0;
+      totalInvested = 0;
+    };
+
+    // Drain qty from a lot queue, accumulating P&L. Returns leftover qty.
+    const drainLots = (
+      lots: Lot[],
+      qty: number,
+      closePrice: number,
+      isLong: boolean, // true = closing long (buy low, sell high)
+    ): number => {
+      let remaining = qty;
+      while (remaining > 1e-8 && lots.length > 0) {
+        const lot = lots[0];
+        const fill = Math.min(remaining, lot.qty);
+        currentPnl += isLong
+          ? (closePrice - lot.price) * fill // long profit = sell - buy
+          : (lot.price - closePrice) * fill; // short profit = open sell - close buy
+        remaining -= fill;
+        lot.qty -= fill;
+        if (lot.qty < 1e-8) lots.shift();
+      }
+      return remaining;
+    };
+
+    for (const order of symOrders) {
+      const qty = parseFloat(order.filled_qty);
+      const price = parseFloat(order.filled_avg_price ?? "0");
+      if (qty <= 0 || price <= 0) continue;
+
+      if (order.side === "buy") {
+        if (shortLots.length > 0) {
+          // Closing (part of) a short position
+          const leftover = drainLots(shortLots, qty, price, false);
+          if (shortLots.length === 0) {
+            recordTrade(); // short fully closed
+            if (leftover > 1e-8) {
+              // Excess flips into a new long
+              longLots.push({ qty: leftover, price });
+              totalInvested = leftover * price;
+            }
+          }
+        } else {
+          // Opening or adding to long
+          longLots.push({ qty, price });
+          totalInvested += qty * price;
+        }
+      } else {
+        // sell
+        if (longLots.length > 0) {
+          // Closing (part of) a long position
+          const leftover = drainLots(longLots, qty, price, true);
+          if (longLots.length === 0) {
+            recordTrade(); // long fully closed
+            if (leftover > 1e-8) {
+              // Excess flips into a new short
+              shortLots.push({ qty: leftover, price });
+              totalInvested = leftover * price;
+            }
+          }
+        } else {
+          // Opening or adding to short
+          shortLots.push({ qty, price });
+          totalInvested += qty * price;
+        }
+      }
+    }
+  }
+
+  const wins = completed.filter((t) => t.realizedPnl > 0).length;
+  const losses = completed.filter((t) => t.realizedPnl <= 0).length;
+  const totalTrades = completed.length;
+
+  console.log(
+    `[stats] computeWinRateFromOrders — completed trades: ${totalTrades}, wins: ${wins}, losses: ${losses}`,
+  );
+
+  return {
+    wins,
+    losses,
+    totalTrades,
+    winRate: totalTrades > 0 ? wins / totalTrades : null,
+  };
+}
+
 const RISK_FREE_DAILY = 0.045 / 252;
 
 export function computeReturns(equities: number[]): number[] {

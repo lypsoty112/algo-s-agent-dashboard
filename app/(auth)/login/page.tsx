@@ -90,7 +90,9 @@ function fmtPct(value: number | null | undefined): string {
 async function StatsPanel() {
   const noCache = process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production";
   console.log("[StatsPanel] rendering, DISABLE_CACHE:", noCache);
-  if (noCache) await connection();
+  // Always call connection() — StatsPanel uses Date.now() for relative timestamps,
+  // so it must opt into dynamic rendering regardless of cache mode.
+  await connection();
   const { totalPnlPct, closedOrders, kbEntries, strategies, lastAgentRun, agentRunsLastMonth } =
     await (noCache ? fetchSystemStats() : getSystemStats());
   console.log("[StatsPanel] stats received:", {

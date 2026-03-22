@@ -222,6 +222,28 @@ function DrawerBody({ item }: { item: DrawerItem }) {
 
       <Separator />
 
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+          Navigate
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            href={`/knowledge-base?q=${encodeURIComponent(t.symbol)}`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            View in Knowledge Base
+          </Link>
+          <Link
+            href={`/strategies?subject=${encodeURIComponent(t.symbol)}`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            View in Strategies
+          </Link>
+        </div>
+      </div>
+
+      <Separator />
+
       <RationaleSection state={rationale} />
     </div>
   );

@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
@@ -10,7 +12,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { CATEGORY_LABELS, type KBEntry } from "./kb-client";
+import { CATEGORY_LABELS, CATEGORY_COLORS, type KBEntry } from "./kb-client";
 
 function fmtDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -47,7 +49,7 @@ export function EntryDrawer({ entry, onClose }: EntryDrawerProps) {
           <SheetHeader className="px-4 pt-4 pb-2">
             <SheetTitle>{entry.subject}</SheetTitle>
             <SheetDescription>
-              <Badge variant="secondary">
+              <Badge className={CATEGORY_COLORS[entry.category]}>
                 {CATEGORY_LABELS[entry.category] ?? entry.category}
               </Badge>
             </SheetDescription>
@@ -56,6 +58,28 @@ export function EntryDrawer({ entry, onClose }: EntryDrawerProps) {
             <div className="grid grid-cols-2 gap-3">
               <MetricRow label="Created" value={fmtDate(entry.createdAt)} />
               <MetricRow label="Updated" value={fmtDate(entry.updatedAt)} />
+            </div>
+
+            <Separator />
+
+            <div className="flex flex-col gap-2">
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                Navigate
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  href={`/strategies?subject=${encodeURIComponent(entry.subject)}`}
+                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                >
+                  View in Strategies
+                </Link>
+                <Link
+                  href={`/positions`}
+                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                >
+                  View in Positions
+                </Link>
+              </div>
             </div>
 
             <Separator />

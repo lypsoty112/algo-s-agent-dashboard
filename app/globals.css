@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "../node_modules/@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,6 +42,18 @@
     --font-serif: Noto Serif Georgian, ui-serif, serif;
     --font-mono: DM Mono, ui-monospace, monospace;
     --radius: 0.4rem;
+    --cat-stock: oklch(0.90 0.05 250);
+    --cat-stock-fg: oklch(0.40 0.08 250);
+    --cat-market: oklch(0.92 0.06 85);
+    --cat-market-fg: oklch(0.42 0.10 85);
+    --cat-industry: oklch(0.90 0.06 300);
+    --cat-industry-fg: oklch(0.40 0.10 300);
+    --cat-mistakes: oklch(0.92 0.05 25);
+    --cat-mistakes-fg: oklch(0.42 0.12 25);
+    --cat-system: oklch(0.92 0.01 80);
+    --cat-system-fg: oklch(0.42 0.02 80);
+    --cat-other: oklch(0.92 0.05 155);
+    --cat-other-fg: oklch(0.42 0.08 155);
     --shadow-x: 0px;
     --shadow-y: 8px;
     --shadow-blur: 15px;
@@ -96,6 +109,18 @@
     --font-serif: Noto Serif Georgian, ui-serif, serif;
     --font-mono: DM Mono, ui-monospace, monospace;
     --radius: 0.4rem;
+    --cat-stock: oklch(0.25 0.04 250);
+    --cat-stock-fg: oklch(0.75 0.08 250);
+    --cat-market: oklch(0.25 0.04 85);
+    --cat-market-fg: oklch(0.78 0.08 85);
+    --cat-industry: oklch(0.25 0.04 300);
+    --cat-industry-fg: oklch(0.75 0.08 300);
+    --cat-mistakes: oklch(0.25 0.04 25);
+    --cat-mistakes-fg: oklch(0.78 0.10 25);
+    --cat-system: oklch(0.22 0.01 80);
+    --cat-system-fg: oklch(0.70 0.02 80);
+    --cat-other: oklch(0.25 0.04 155);
+    --cat-other-fg: oklch(0.75 0.08 155);
     --shadow-x: 0px;
     --shadow-y: 10px;
     --shadow-blur: 25px;
@@ -145,6 +170,19 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-cat-stock: var(--cat-stock);
+    --color-cat-stock-fg: var(--cat-stock-fg);
+    --color-cat-market: var(--cat-market);
+    --color-cat-market-fg: var(--cat-market-fg);
+    --color-cat-industry: var(--cat-industry);
+    --color-cat-industry-fg: var(--cat-industry-fg);
+    --color-cat-mistakes: var(--cat-mistakes);
+    --color-cat-mistakes-fg: var(--cat-mistakes-fg);
+    --color-cat-system: var(--cat-system);
+    --color-cat-system-fg: var(--cat-system-fg);
+    --color-cat-other: var(--cat-other);
+    --color-cat-other-fg: var(--cat-other-fg);
 
     --font-sans: var(--font-sans);
     --font-mono: var(--font-mono);

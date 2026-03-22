@@ -45,6 +45,15 @@ export const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
+export const CATEGORY_COLORS: Record<string, string> = {
+  stock_specific: "bg-cat-stock text-cat-stock-fg",
+  general_market: "bg-cat-market text-cat-market-fg",
+  industry: "bg-cat-industry text-cat-industry-fg",
+  mistakes: "bg-cat-mistakes text-cat-mistakes-fg",
+  system: "bg-cat-system text-cat-system-fg",
+  other: "bg-cat-other text-cat-other-fg",
+};
+
 const ALL_CATEGORIES = Object.keys(CATEGORY_LABELS);
 
 function fmtDate(iso: string): string {
@@ -86,6 +95,15 @@ export function KBClient() {
   const [selectedEntry, setSelectedEntry] = useState<KBEntry | null>(null);
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const q = searchParams.get("q") ?? "";
+    const cats = searchParams.get("categories");
+    setInputValue(q);
+    setQuery(q);
+    setSelectedCategories(cats ? cats.split(",").filter(Boolean) : []);
+    setPage(1);
+  }, [searchParams]);
 
   const handleInputChange = useCallback((value: string) => {
     setInputValue(value);
@@ -162,7 +180,11 @@ export function KBClient() {
               type="button"
             >
               <Badge
-                variant={selectedCategories.includes(cat) ? "secondary" : "outline"}
+                className={
+                  selectedCategories.includes(cat)
+                    ? CATEGORY_COLORS[cat]
+                    : "opacity-50 " + CATEGORY_COLORS[cat]
+                }
               >
                 {CATEGORY_LABELS[cat]}
               </Badge>
@@ -218,11 +240,11 @@ export function KBClient() {
                         className="cursor-pointer"
                         onClick={() => setSelectedEntry(entry)}
                       >
-                        <TableCell className="font-mono font-semibold max-w-xs truncate">
+                        <TableCell className="font-mono max-w-xs truncate">
                           {entry.subject}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="secondary">
+                          <Badge className={CATEGORY_COLORS[entry.category]}>
                             {CATEGORY_LABELS[entry.category] ?? entry.category}
                           </Badge>
                         </TableCell>

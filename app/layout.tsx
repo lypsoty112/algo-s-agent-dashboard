@@ -27,6 +27,7 @@ export const metadata: Metadata = {
     "Real-time performance, positions, and strategy overview for the algo-s autonomous trading system.",
   authors: [{ name: "algo-s" }],
   robots: { index: false, follow: false },
+  icons: { icon: "/algo-s-logo.ico" },
 };
 
 export default function RootLayout({

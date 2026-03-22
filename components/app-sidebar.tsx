@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { LayoutDashboard, TrendingUp, Briefcase, BookOpen, Lightbulb, LogOut } from "lucide-react";
 import logo from "@/images/algo-s-logo.png";
 import {
@@ -29,6 +30,14 @@ export function AppSidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { isMobile, setOpenMobile } = useSidebar();
+  const [isLive, setIsLive] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    fetch("/api/system-status")
+      .then((r) => r.json())
+      .then((d) => setIsLive(d.live ?? false))
+      .catch(() => setIsLive(false));
+  }, []);
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -86,8 +95,16 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="pointer-events-none">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-              <span className="text-sm text-muted-foreground">Live</span>
+              {isLive === null ? (
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 shrink-0" />
+              ) : isLive ? (
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              ) : (
+                <span className="w-2 h-2 rounded-full bg-muted-foreground/40 shrink-0" />
+              )}
+              <span className="text-sm text-muted-foreground">
+                {isLive === null ? "—" : isLive ? "Live" : "Offline"}
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>

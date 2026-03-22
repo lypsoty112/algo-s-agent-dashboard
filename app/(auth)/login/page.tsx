@@ -6,6 +6,7 @@ import logo from "@/images/algo-s-logo.png";
 import { LoginForm } from "./login-form";
 import { db, safeQuery } from "@/lib/db";
 import { getClosedOrdersCount, getPortfolioHistory } from "@/lib/alpaca";
+import { checkIsLive } from "@/lib/system-status";
 
 type SystemStats = {
   totalPnlPct: number | null;
@@ -14,6 +15,7 @@ type SystemStats = {
   strategies: number | null;
   lastAgentRun: Date | null;
   agentRunsLastMonth: number | null;
+  isLive: boolean;
 };
 
 async function fetchSystemStats(): Promise<SystemStats> {
@@ -21,7 +23,7 @@ async function fetchSystemStats(): Promise<SystemStats> {
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-  const [history, closedOrders, kbEntries, strategies, lastFlowRun, agentRunsLastMonth] =
+  const [history, closedOrders, kbEntries, strategies, lastFlowRun, agentRunsLastMonth, liveStatus] =
     await Promise.all([
       getPortfolioHistory({ period: "1A", timeframe: "1D", pnl_reset: "no_reset" }).catch((e) => {
         console.error("[fetchSystemStats] portfolio history failed:", e);
@@ -43,6 +45,7 @@ async function fetchSystemStats(): Promise<SystemStats> {
         () => db.agentRun.count({ where: { createdAt: { gte: oneMonthAgo } } }),
         "agent-runs-last-month"
       ),
+      checkIsLive().catch(() => ({ live: false, lastActivityAt: null })),
     ]);
 
   const pnlPctArr = history?.profit_loss_pct;
@@ -56,6 +59,7 @@ async function fetchSystemStats(): Promise<SystemStats> {
     strategies: strategies.data ?? null,
     lastAgentRun: lastFlowRun.data?.createdAt ?? null,
     agentRunsLastMonth: agentRunsLastMonth.data ?? null,
+    isLive: liveStatus.live,
   };
   console.log("[fetchSystemStats] returning:", JSON.stringify(result));
   return result;
@@ -93,7 +97,7 @@ async function StatsPanel() {
   // Always call connection() — StatsPanel uses Date.now() for relative timestamps,
   // so it must opt into dynamic rendering regardless of cache mode.
   await connection();
-  const { totalPnlPct, closedOrders, kbEntries, strategies, lastAgentRun, agentRunsLastMonth } =
+  const { totalPnlPct, closedOrders, kbEntries, strategies, lastAgentRun, agentRunsLastMonth, isLive } =
     await (noCache ? fetchSystemStats() : getSystemStats());
   console.log("[StatsPanel] stats received:", {
     totalPnlPct,
@@ -102,6 +106,7 @@ async function StatsPanel() {
     strategies,
     lastAgentRun,
     agentRunsLastMonth,
+    isLive,
   });
 
   const pnlPositive = totalPnlPct != null && totalPnlPct >= 0;
@@ -155,6 +160,20 @@ async function StatsPanel() {
 
   return (
     <>
+      <div className="flex items-center gap-2 mb-8">
+        <span
+          className={`w-2 h-2 rounded-full shrink-0 ${
+            isLive ? "bg-emerald-500 animate-pulse" : "bg-zinc-600"
+          }`}
+        />
+        <h2 className="text-2xl font-semibold text-white tracking-tight">
+          algo-s agents &middot;{" "}
+          <span className={isLive ? "text-emerald-400" : "text-zinc-500"}>
+            {isLive ? "live" : "offline"}
+          </span>
+        </h2>
+      </div>
+
       <div className="grid grid-cols-2 gap-4">
         {stats.map((stat) => (
           <div
@@ -188,6 +207,10 @@ async function StatsPanel() {
 function StatsSkeleton() {
   return (
     <>
+      <div className="flex items-center gap-2 mb-8">
+        <div className="w-2 h-2 rounded-full bg-white/10" />
+        <div className="h-7 w-48 bg-white/10 rounded animate-pulse" />
+      </div>
       <div className="grid grid-cols-2 gap-4">
         {Array.from({ length: 6 }).map((_, i) => (
           // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton
@@ -241,12 +264,9 @@ export default function LoginPage() {
       <div className="hidden lg:flex  w-[58%]  px-1 py-1">
         <div className="bg-[#0f1117] w-full h-full px-12 py-12 rounded-2xl flex flex-col justify-center">
           <div className="max-w-lg">
-            <p className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-2">
+            <p className="text-xs font-mono uppercase tracking-widest text-zinc-500 mb-6">
               System Status
             </p>
-            <h2 className="text-2xl font-semibold text-white mb-8 tracking-tight">
-              algo-s agents · live
-            </h2>
 
             <Suspense fallback={<StatsSkeleton />}>
               <StatsPanel />

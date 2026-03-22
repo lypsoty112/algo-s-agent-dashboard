@@ -395,12 +395,13 @@ export function PositionsClient({ positions, trades }: PositionsClientProps) {
       {/* Detail Drawer */}
       <Sheet
         open={drawerItem !== null}
+        modal={false}
         onOpenChange={(open: boolean) => {
           if (!open) setDrawerItem(null);
         }}
       >
         {drawerItem && (
-          <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto p-0">
+          <SheetContent side="right" showOverlay={false} className="w-full sm:max-w-md overflow-y-auto p-0">
             <SheetHeader className="px-4 pt-4 pb-2">
               <SheetTitle className="font-mono">{drawerItem.data.symbol}</SheetTitle>
               <SheetDescription>

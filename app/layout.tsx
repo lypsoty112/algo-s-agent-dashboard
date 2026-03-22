@@ -19,8 +19,14 @@ const fontMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "algo-s Dashboard",
-  description: "Investor dashboard for the algo-s-agents trading system",
+  title: {
+    default: "algo-s — Investor Dashboard",
+    template: "%s · algo-s",
+  },
+  description:
+    "Real-time performance, positions, and strategy overview for the algo-s autonomous trading system.",
+  authors: [{ name: "algo-s" }],
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({

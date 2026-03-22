@@ -40,12 +40,13 @@ export function StrategyDrawer({ strategy, onClose }: StrategyDrawerProps) {
   return (
     <Sheet
       open={strategy !== null}
+      modal={false}
       onOpenChange={(open: boolean) => {
         if (!open) onClose();
       }}
     >
       {strategy && (
-        <SheetContent side="right" className="w-full sm:max-w-md overflow-y-auto p-0">
+        <SheetContent side="right" showOverlay={false} className="w-full sm:max-w-md overflow-y-auto p-0">
           <SheetHeader className="px-4 pt-4 pb-2">
             <SheetTitle>{strategy.subject}</SheetTitle>
             <SheetDescription className="flex flex-wrap items-center gap-2">

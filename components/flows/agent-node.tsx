@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState } from "react"; // useState kept for StepDetails per-step expand
 import { Handle, Position } from "@xyflow/react";
 import type { NodeProps } from "@xyflow/react";
 import { ChevronDown, ChevronRight, Wrench } from "lucide-react";
@@ -52,7 +52,7 @@ function ToolCallValue({ value }: { value: unknown }) {
   }
 
   return (
-    <pre className="text-xs bg-muted/50 rounded p-2 overflow-x-auto max-h-40 overflow-y-auto">
+    <pre className="text-xs bg-muted/50 rounded p-2 overflow-x-auto">
       <code>{formatted.content}</code>
     </pre>
   );
@@ -97,11 +97,24 @@ function StepDetails({ steps }: { steps: StepEntry[] }) {
               ) : (
                 <ChevronRight className="size-3 shrink-0" />
               )}
-              <span className="font-mono text-muted-foreground">
+              <span className="font-mono text-muted-foreground shrink-0">
                 Step {step.stepNumber}
               </span>
+              {!isExpanded && step.toolCalls.length > 0 && (
+                <span className="flex items-center gap-1 min-w-0 overflow-hidden">
+                  {step.toolCalls.map((tc, i) => (
+                    <span
+                      key={i}
+                      className="flex items-center gap-0.5 font-mono text-foreground truncate"
+                    >
+                      <Wrench className="size-2.5 shrink-0 text-muted-foreground" />
+                      <span className="truncate">{tc.name}</span>
+                    </span>
+                  ))}
+                </span>
+              )}
               {tokens && (
-                <span className="text-muted-foreground ml-auto">{tokens}</span>
+                <span className="text-muted-foreground ml-auto shrink-0">{tokens}</span>
               )}
             </button>
 
@@ -144,7 +157,6 @@ function StepDetails({ steps }: { steps: StepEntry[] }) {
 
 function AgentNodeComponent({ data }: NodeProps) {
   const nodeData = data as unknown as AgentNodeData;
-  const [expanded, setExpanded] = useState(nodeData.isStarter);
 
   const borderColor = STATUS_BORDER[nodeData.status] ?? "border-l-border";
   const badgeColor = STATUS_BADGE[nodeData.status] ?? "";
@@ -153,48 +165,30 @@ function AgentNodeComponent({ data }: NodeProps) {
 
   return (
     <>
-      <Handle type="target" position={Position.Top} className="!bg-border !w-2 !h-2" />
+      <Handle type="target" position={Position.Left} className="!bg-border !w-2 !h-2" />
       <div
-        className={`bg-card border border-border rounded-xl shadow-sm border-l-4 ${borderColor} min-w-[280px] max-w-[420px]`}
+        className={`bg-card border border-border rounded-xl shadow-sm border-l-4 ${borderColor} w-[420px]`}
       >
         {/* Header */}
         <div className="flex items-center justify-between gap-2 px-3 py-2">
           <span className="font-mono font-medium text-sm text-foreground truncate">
             {nodeData.label}
           </span>
-          <div className="flex items-center gap-2 shrink-0">
-            <Badge className={badgeColor}>{nodeData.status}</Badge>
-            {steps && steps.length > 0 && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setExpanded(!expanded);
-                }}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                {expanded ? (
-                  <ChevronDown className="size-4" />
-                ) : (
-                  <ChevronRight className="size-4" />
-                )}
-              </button>
-            )}
-          </div>
+          <Badge className={`${badgeColor} shrink-0`}>{nodeData.status}</Badge>
         </div>
 
         {/* Summary */}
         <div className="px-3 pb-2 space-y-1">
           {nodeData.parentToolCallInput != null && (
-            <div className="text-xs text-muted-foreground truncate">
+            <div className="text-xs text-muted-foreground">
               <span className="text-[10px] uppercase tracking-wide">in: </span>
               {typeof nodeData.parentToolCallInput === "string"
-                ? nodeData.parentToolCallInput.slice(0, 120)
-                : JSON.stringify(nodeData.parentToolCallInput).slice(0, 120)}
+                ? nodeData.parentToolCallInput
+                : JSON.stringify(nodeData.parentToolCallInput, null, 2)}
             </div>
           )}
           {nodeData.outputSummary && (
-            <p className="text-xs text-muted-foreground line-clamp-2">
+            <p className="text-xs text-muted-foreground">
               {nodeData.outputSummary}
             </p>
           )}
@@ -216,14 +210,14 @@ function AgentNodeComponent({ data }: NodeProps) {
           )}
         </div>
 
-        {/* Expanded: Step details */}
-        {expanded && steps && steps.length > 0 && (
-          <div className="border-t border-border px-3 py-2 max-h-[400px] overflow-y-auto">
+        {/* Step details — always visible */}
+        {steps && steps.length > 0 && (
+          <div className="border-t border-border px-3 py-2">
             <StepDetails steps={steps} />
           </div>
         )}
       </div>
-      <Handle type="source" position={Position.Bottom} className="!bg-border !w-2 !h-2" />
+      <Handle type="source" position={Position.Right} className="!bg-border !w-2 !h-2" />
     </>
   );
 }

@@ -128,7 +128,7 @@ export function FlowSheet({
                       {run.error}
                     </p>
                   ) : run.outputSummary ? (
-                    <p className="text-xs text-muted-foreground ml-6 line-clamp-2">
+                    <p className="text-xs text-muted-foreground ml-6">
                       {run.outputSummary}
                     </p>
                   ) : null}

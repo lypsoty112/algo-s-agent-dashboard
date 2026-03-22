@@ -1,5 +1,4 @@
 import type { Node, Edge } from "@xyflow/react";
-import ELK from "elkjs/lib/elk.bundled.js";
 
 // --- Types matching API response ---
 
@@ -53,11 +52,9 @@ export type AgentNodeData = AgentRunData & {
 
 // --- Graph construction ---
 
-const COLLAPSED_WIDTH = 300;
-const COLLAPSED_HEIGHT = 140;
-const EXPANDED_WIDTH = 420;
-const EXPANDED_HEIGHT_BASE = 200;
-const EXPANDED_STEP_HEIGHT = 60;
+const NODE_WIDTH = 420;
+const NODE_HEIGHT_BASE = 130;
+const NODE_STEP_HEIGHT = 28;
 
 export function buildGraph(
   flowRun: FlowRunData,
@@ -108,11 +105,8 @@ export function buildGraph(
     }
 
     const stepCount = run.stepCount ?? run.steps?.length ?? 0;
-    const expanded = isStarter;
-    const height = expanded
-      ? EXPANDED_HEIGHT_BASE + stepCount * EXPANDED_STEP_HEIGHT
-      : COLLAPSED_HEIGHT;
-    const width = expanded ? EXPANDED_WIDTH : COLLAPSED_WIDTH;
+    const height = NODE_HEIGHT_BASE + Math.min(stepCount * NODE_STEP_HEIGHT, 400);
+    const width = NODE_WIDTH;
 
     return {
       id: run.id,
@@ -189,57 +183,27 @@ export function buildGraph(
   return { nodes, edges };
 }
 
-// --- ELK Layout ---
+// --- Sequential horizontal layout ---
+// Agents run one at a time; sort by startedAt and place left-to-right in a
+// single row so no two nodes ever appear above/below each other.
 
-const elk = new ELK();
+const NODE_GAP = 80;
 
-export async function layoutGraph(
+export function layoutGraph(
   nodes: Node<AgentNodeData>[],
-  edges: Edge[]
+  _edges: Edge[]
 ): Promise<Node<AgentNodeData>[]> {
-  const graph = {
-    id: "root",
-    layoutOptions: {
-      "elk.algorithm": "layered",
-      "elk.direction": "DOWN",
-      "elk.spacing.nodeNode": "60",
-      "elk.layered.spacing.nodeNodeBetweenLayers": "80",
-    },
-    children: nodes.map((node) => ({
-      id: node.id,
-      width: node.width ?? COLLAPSED_WIDTH,
-      height: node.height ?? COLLAPSED_HEIGHT,
-    })),
-    edges: edges.map((edge) => ({
-      id: edge.id,
-      sources: [edge.source],
-      targets: [edge.target],
-    })),
-  };
+  const sorted = [...nodes].sort(
+    (a, b) =>
+      new Date(a.data.startedAt).getTime() -
+      new Date(b.data.startedAt).getTime()
+  );
 
-  const layout = await elk.layout(graph);
-
-  return nodes.map((node) => {
-    const layoutNode = layout.children?.find((n) => n.id === node.id);
-    return {
+  return Promise.resolve(
+    sorted.map((node, i) => ({
       ...node,
-      position: {
-        x: layoutNode?.x ?? 0,
-        y: layoutNode?.y ?? 0,
-      },
-    };
-  });
+      position: { x: i * (NODE_WIDTH + NODE_GAP), y: 0 },
+    }))
+  );
 }
 
-export function getNodeDimensions(
-  expanded: boolean,
-  stepCount: number
-): { width: number; height: number } {
-  if (expanded) {
-    return {
-      width: EXPANDED_WIDTH,
-      height: EXPANDED_HEIGHT_BASE + stepCount * EXPANDED_STEP_HEIGHT,
-    };
-  }
-  return { width: COLLAPSED_WIDTH, height: COLLAPSED_HEIGHT };
-}

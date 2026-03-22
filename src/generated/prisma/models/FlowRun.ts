@@ -27,75 +27,99 @@ export type AggregateFlowRun = {
 }
 
 export type FlowRunAvgAggregateOutputType = {
-  duration: number | null
+  durationMs: number | null
 }
 
 export type FlowRunSumAggregateOutputType = {
-  duration: number | null
+  durationMs: number | null
 }
 
 export type FlowRunMinAggregateOutputType = {
   id: string | null
-  flowId: string | null
-  status: $Enums.FlowRunStatus | null
-  duration: number | null
+  flowName: string | null
+  starterAgent: string | null
+  status: $Enums.RunStatus | null
   error: string | null
+  startedAt: Date | null
+  endedAt: Date | null
+  durationMs: number | null
   createdAt: Date | null
+  deletedAt: Date | null
 }
 
 export type FlowRunMaxAggregateOutputType = {
   id: string | null
-  flowId: string | null
-  status: $Enums.FlowRunStatus | null
-  duration: number | null
+  flowName: string | null
+  starterAgent: string | null
+  status: $Enums.RunStatus | null
   error: string | null
+  startedAt: Date | null
+  endedAt: Date | null
+  durationMs: number | null
   createdAt: Date | null
+  deletedAt: Date | null
 }
 
 export type FlowRunCountAggregateOutputType = {
   id: number
-  flowId: number
+  flowName: number
+  starterAgent: number
   status: number
-  duration: number
   error: number
+  startedAt: number
+  endedAt: number
+  durationMs: number
   createdAt: number
+  deletedAt: number
   _all: number
 }
 
 
 export type FlowRunAvgAggregateInputType = {
-  duration?: true
+  durationMs?: true
 }
 
 export type FlowRunSumAggregateInputType = {
-  duration?: true
+  durationMs?: true
 }
 
 export type FlowRunMinAggregateInputType = {
   id?: true
-  flowId?: true
+  flowName?: true
+  starterAgent?: true
   status?: true
-  duration?: true
   error?: true
+  startedAt?: true
+  endedAt?: true
+  durationMs?: true
   createdAt?: true
+  deletedAt?: true
 }
 
 export type FlowRunMaxAggregateInputType = {
   id?: true
-  flowId?: true
+  flowName?: true
+  starterAgent?: true
   status?: true
-  duration?: true
   error?: true
+  startedAt?: true
+  endedAt?: true
+  durationMs?: true
   createdAt?: true
+  deletedAt?: true
 }
 
 export type FlowRunCountAggregateInputType = {
   id?: true
-  flowId?: true
+  flowName?: true
+  starterAgent?: true
   status?: true
-  duration?: true
   error?: true
+  startedAt?: true
+  endedAt?: true
+  durationMs?: true
   createdAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -187,11 +211,15 @@ export type FlowRunGroupByArgs<ExtArgs extends runtime.Types.Extensions.Internal
 
 export type FlowRunGroupByOutputType = {
   id: string
-  flowId: string
-  status: $Enums.FlowRunStatus
-  duration: number | null
+  flowName: string
+  starterAgent: string
+  status: $Enums.RunStatus
   error: string | null
+  startedAt: Date
+  endedAt: Date | null
+  durationMs: number | null
   createdAt: Date
+  deletedAt: Date | null
   _count: FlowRunCountAggregateOutputType | null
   _avg: FlowRunAvgAggregateOutputType | null
   _sum: FlowRunSumAggregateOutputType | null
@@ -219,23 +247,29 @@ export type FlowRunWhereInput = {
   OR?: Prisma.FlowRunWhereInput[]
   NOT?: Prisma.FlowRunWhereInput | Prisma.FlowRunWhereInput[]
   id?: Prisma.StringFilter<"FlowRun"> | string
-  flowId?: Prisma.StringFilter<"FlowRun"> | string
-  status?: Prisma.EnumFlowRunStatusFilter<"FlowRun"> | $Enums.FlowRunStatus
-  duration?: Prisma.IntNullableFilter<"FlowRun"> | number | null
+  flowName?: Prisma.StringFilter<"FlowRun"> | string
+  starterAgent?: Prisma.StringFilter<"FlowRun"> | string
+  status?: Prisma.EnumRunStatusFilter<"FlowRun"> | $Enums.RunStatus
   error?: Prisma.StringNullableFilter<"FlowRun"> | string | null
+  startedAt?: Prisma.DateTimeFilter<"FlowRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableFilter<"FlowRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableFilter<"FlowRun"> | number | null
   createdAt?: Prisma.DateTimeFilter<"FlowRun"> | Date | string
-  flow?: Prisma.XOR<Prisma.FlowScalarRelationFilter, Prisma.FlowWhereInput>
+  deletedAt?: Prisma.DateTimeNullableFilter<"FlowRun"> | Date | string | null
   agentRuns?: Prisma.AgentRunListRelationFilter
 }
 
 export type FlowRunOrderByWithRelationInput = {
   id?: Prisma.SortOrder
-  flowId?: Prisma.SortOrder
+  flowName?: Prisma.SortOrder
+  starterAgent?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  duration?: Prisma.SortOrderInput | Prisma.SortOrder
   error?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationMs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  flow?: Prisma.FlowOrderByWithRelationInput
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   agentRuns?: Prisma.AgentRunOrderByRelationAggregateInput
 }
 
@@ -244,22 +278,29 @@ export type FlowRunWhereUniqueInput = Prisma.AtLeast<{
   AND?: Prisma.FlowRunWhereInput | Prisma.FlowRunWhereInput[]
   OR?: Prisma.FlowRunWhereInput[]
   NOT?: Prisma.FlowRunWhereInput | Prisma.FlowRunWhereInput[]
-  flowId?: Prisma.StringFilter<"FlowRun"> | string
-  status?: Prisma.EnumFlowRunStatusFilter<"FlowRun"> | $Enums.FlowRunStatus
-  duration?: Prisma.IntNullableFilter<"FlowRun"> | number | null
+  flowName?: Prisma.StringFilter<"FlowRun"> | string
+  starterAgent?: Prisma.StringFilter<"FlowRun"> | string
+  status?: Prisma.EnumRunStatusFilter<"FlowRun"> | $Enums.RunStatus
   error?: Prisma.StringNullableFilter<"FlowRun"> | string | null
+  startedAt?: Prisma.DateTimeFilter<"FlowRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableFilter<"FlowRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableFilter<"FlowRun"> | number | null
   createdAt?: Prisma.DateTimeFilter<"FlowRun"> | Date | string
-  flow?: Prisma.XOR<Prisma.FlowScalarRelationFilter, Prisma.FlowWhereInput>
+  deletedAt?: Prisma.DateTimeNullableFilter<"FlowRun"> | Date | string | null
   agentRuns?: Prisma.AgentRunListRelationFilter
 }, "id">
 
 export type FlowRunOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
-  flowId?: Prisma.SortOrder
+  flowName?: Prisma.SortOrder
+  starterAgent?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  duration?: Prisma.SortOrderInput | Prisma.SortOrder
   error?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationMs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.FlowRunCountOrderByAggregateInput
   _avg?: Prisma.FlowRunAvgOrderByAggregateInput
   _max?: Prisma.FlowRunMaxOrderByAggregateInput
@@ -272,122 +313,157 @@ export type FlowRunScalarWhereWithAggregatesInput = {
   OR?: Prisma.FlowRunScalarWhereWithAggregatesInput[]
   NOT?: Prisma.FlowRunScalarWhereWithAggregatesInput | Prisma.FlowRunScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"FlowRun"> | string
-  flowId?: Prisma.StringWithAggregatesFilter<"FlowRun"> | string
-  status?: Prisma.EnumFlowRunStatusWithAggregatesFilter<"FlowRun"> | $Enums.FlowRunStatus
-  duration?: Prisma.IntNullableWithAggregatesFilter<"FlowRun"> | number | null
+  flowName?: Prisma.StringWithAggregatesFilter<"FlowRun"> | string
+  starterAgent?: Prisma.StringWithAggregatesFilter<"FlowRun"> | string
+  status?: Prisma.EnumRunStatusWithAggregatesFilter<"FlowRun"> | $Enums.RunStatus
   error?: Prisma.StringNullableWithAggregatesFilter<"FlowRun"> | string | null
+  startedAt?: Prisma.DateTimeWithAggregatesFilter<"FlowRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FlowRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableWithAggregatesFilter<"FlowRun"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FlowRun"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FlowRun"> | Date | string | null
 }
 
 export type FlowRunCreateInput = {
   id?: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
+  flowName: string
+  starterAgent: string
+  status: $Enums.RunStatus
   error?: string | null
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
-  flow: Prisma.FlowCreateNestedOneWithoutFlowRunsInput
+  deletedAt?: Date | string | null
   agentRuns?: Prisma.AgentRunCreateNestedManyWithoutFlowRunInput
 }
 
 export type FlowRunUncheckedCreateInput = {
   id?: string
-  flowId: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
+  flowName: string
+  starterAgent: string
+  status: $Enums.RunStatus
   error?: string | null
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   agentRuns?: Prisma.AgentRunUncheckedCreateNestedManyWithoutFlowRunInput
 }
 
 export type FlowRunUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flowName?: Prisma.StringFieldUpdateOperationsInput | string
+  starterAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  flow?: Prisma.FlowUpdateOneRequiredWithoutFlowRunsNestedInput
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   agentRuns?: Prisma.AgentRunUpdateManyWithoutFlowRunNestedInput
 }
 
 export type FlowRunUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  flowId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flowName?: Prisma.StringFieldUpdateOperationsInput | string
+  starterAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   agentRuns?: Prisma.AgentRunUncheckedUpdateManyWithoutFlowRunNestedInput
 }
 
 export type FlowRunCreateManyInput = {
   id?: string
-  flowId: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
+  flowName: string
+  starterAgent: string
+  status: $Enums.RunStatus
   error?: string | null
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type FlowRunUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flowName?: Prisma.StringFieldUpdateOperationsInput | string
+  starterAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FlowRunUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  flowId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flowName?: Prisma.StringFieldUpdateOperationsInput | string
+  starterAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type FlowRunListRelationFilter = {
-  every?: Prisma.FlowRunWhereInput
-  some?: Prisma.FlowRunWhereInput
-  none?: Prisma.FlowRunWhereInput
-}
-
-export type FlowRunOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FlowRunCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  flowId?: Prisma.SortOrder
+  flowName?: Prisma.SortOrder
+  starterAgent?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   error?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type FlowRunAvgOrderByAggregateInput = {
-  duration?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
 }
 
 export type FlowRunMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  flowId?: Prisma.SortOrder
+  flowName?: Prisma.SortOrder
+  starterAgent?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   error?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type FlowRunMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
-  flowId?: Prisma.SortOrder
+  flowName?: Prisma.SortOrder
+  starterAgent?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  duration?: Prisma.SortOrder
   error?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type FlowRunSumOrderByAggregateInput = {
-  duration?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
 }
 
 export type FlowRunScalarRelationFilter = {
@@ -395,50 +471,8 @@ export type FlowRunScalarRelationFilter = {
   isNot?: Prisma.FlowRunWhereInput
 }
 
-export type FlowRunCreateNestedManyWithoutFlowInput = {
-  create?: Prisma.XOR<Prisma.FlowRunCreateWithoutFlowInput, Prisma.FlowRunUncheckedCreateWithoutFlowInput> | Prisma.FlowRunCreateWithoutFlowInput[] | Prisma.FlowRunUncheckedCreateWithoutFlowInput[]
-  connectOrCreate?: Prisma.FlowRunCreateOrConnectWithoutFlowInput | Prisma.FlowRunCreateOrConnectWithoutFlowInput[]
-  createMany?: Prisma.FlowRunCreateManyFlowInputEnvelope
-  connect?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-}
-
-export type FlowRunUncheckedCreateNestedManyWithoutFlowInput = {
-  create?: Prisma.XOR<Prisma.FlowRunCreateWithoutFlowInput, Prisma.FlowRunUncheckedCreateWithoutFlowInput> | Prisma.FlowRunCreateWithoutFlowInput[] | Prisma.FlowRunUncheckedCreateWithoutFlowInput[]
-  connectOrCreate?: Prisma.FlowRunCreateOrConnectWithoutFlowInput | Prisma.FlowRunCreateOrConnectWithoutFlowInput[]
-  createMany?: Prisma.FlowRunCreateManyFlowInputEnvelope
-  connect?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-}
-
-export type FlowRunUpdateManyWithoutFlowNestedInput = {
-  create?: Prisma.XOR<Prisma.FlowRunCreateWithoutFlowInput, Prisma.FlowRunUncheckedCreateWithoutFlowInput> | Prisma.FlowRunCreateWithoutFlowInput[] | Prisma.FlowRunUncheckedCreateWithoutFlowInput[]
-  connectOrCreate?: Prisma.FlowRunCreateOrConnectWithoutFlowInput | Prisma.FlowRunCreateOrConnectWithoutFlowInput[]
-  upsert?: Prisma.FlowRunUpsertWithWhereUniqueWithoutFlowInput | Prisma.FlowRunUpsertWithWhereUniqueWithoutFlowInput[]
-  createMany?: Prisma.FlowRunCreateManyFlowInputEnvelope
-  set?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  disconnect?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  delete?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  connect?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  update?: Prisma.FlowRunUpdateWithWhereUniqueWithoutFlowInput | Prisma.FlowRunUpdateWithWhereUniqueWithoutFlowInput[]
-  updateMany?: Prisma.FlowRunUpdateManyWithWhereWithoutFlowInput | Prisma.FlowRunUpdateManyWithWhereWithoutFlowInput[]
-  deleteMany?: Prisma.FlowRunScalarWhereInput | Prisma.FlowRunScalarWhereInput[]
-}
-
-export type FlowRunUncheckedUpdateManyWithoutFlowNestedInput = {
-  create?: Prisma.XOR<Prisma.FlowRunCreateWithoutFlowInput, Prisma.FlowRunUncheckedCreateWithoutFlowInput> | Prisma.FlowRunCreateWithoutFlowInput[] | Prisma.FlowRunUncheckedCreateWithoutFlowInput[]
-  connectOrCreate?: Prisma.FlowRunCreateOrConnectWithoutFlowInput | Prisma.FlowRunCreateOrConnectWithoutFlowInput[]
-  upsert?: Prisma.FlowRunUpsertWithWhereUniqueWithoutFlowInput | Prisma.FlowRunUpsertWithWhereUniqueWithoutFlowInput[]
-  createMany?: Prisma.FlowRunCreateManyFlowInputEnvelope
-  set?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  disconnect?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  delete?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  connect?: Prisma.FlowRunWhereUniqueInput | Prisma.FlowRunWhereUniqueInput[]
-  update?: Prisma.FlowRunUpdateWithWhereUniqueWithoutFlowInput | Prisma.FlowRunUpdateWithWhereUniqueWithoutFlowInput[]
-  updateMany?: Prisma.FlowRunUpdateManyWithWhereWithoutFlowInput | Prisma.FlowRunUpdateManyWithWhereWithoutFlowInput[]
-  deleteMany?: Prisma.FlowRunScalarWhereInput | Prisma.FlowRunScalarWhereInput[]
-}
-
-export type EnumFlowRunStatusFieldUpdateOperationsInput = {
-  set?: $Enums.FlowRunStatus
+export type EnumRunStatusFieldUpdateOperationsInput = {
+  set?: $Enums.RunStatus
 }
 
 export type NullableIntFieldUpdateOperationsInput = {
@@ -463,78 +497,30 @@ export type FlowRunUpdateOneRequiredWithoutAgentRunsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FlowRunUpdateToOneWithWhereWithoutAgentRunsInput, Prisma.FlowRunUpdateWithoutAgentRunsInput>, Prisma.FlowRunUncheckedUpdateWithoutAgentRunsInput>
 }
 
-export type FlowRunCreateWithoutFlowInput = {
-  id?: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
-  error?: string | null
-  createdAt?: Date | string
-  agentRuns?: Prisma.AgentRunCreateNestedManyWithoutFlowRunInput
-}
-
-export type FlowRunUncheckedCreateWithoutFlowInput = {
-  id?: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
-  error?: string | null
-  createdAt?: Date | string
-  agentRuns?: Prisma.AgentRunUncheckedCreateNestedManyWithoutFlowRunInput
-}
-
-export type FlowRunCreateOrConnectWithoutFlowInput = {
-  where: Prisma.FlowRunWhereUniqueInput
-  create: Prisma.XOR<Prisma.FlowRunCreateWithoutFlowInput, Prisma.FlowRunUncheckedCreateWithoutFlowInput>
-}
-
-export type FlowRunCreateManyFlowInputEnvelope = {
-  data: Prisma.FlowRunCreateManyFlowInput | Prisma.FlowRunCreateManyFlowInput[]
-  skipDuplicates?: boolean
-}
-
-export type FlowRunUpsertWithWhereUniqueWithoutFlowInput = {
-  where: Prisma.FlowRunWhereUniqueInput
-  update: Prisma.XOR<Prisma.FlowRunUpdateWithoutFlowInput, Prisma.FlowRunUncheckedUpdateWithoutFlowInput>
-  create: Prisma.XOR<Prisma.FlowRunCreateWithoutFlowInput, Prisma.FlowRunUncheckedCreateWithoutFlowInput>
-}
-
-export type FlowRunUpdateWithWhereUniqueWithoutFlowInput = {
-  where: Prisma.FlowRunWhereUniqueInput
-  data: Prisma.XOR<Prisma.FlowRunUpdateWithoutFlowInput, Prisma.FlowRunUncheckedUpdateWithoutFlowInput>
-}
-
-export type FlowRunUpdateManyWithWhereWithoutFlowInput = {
-  where: Prisma.FlowRunScalarWhereInput
-  data: Prisma.XOR<Prisma.FlowRunUpdateManyMutationInput, Prisma.FlowRunUncheckedUpdateManyWithoutFlowInput>
-}
-
-export type FlowRunScalarWhereInput = {
-  AND?: Prisma.FlowRunScalarWhereInput | Prisma.FlowRunScalarWhereInput[]
-  OR?: Prisma.FlowRunScalarWhereInput[]
-  NOT?: Prisma.FlowRunScalarWhereInput | Prisma.FlowRunScalarWhereInput[]
-  id?: Prisma.StringFilter<"FlowRun"> | string
-  flowId?: Prisma.StringFilter<"FlowRun"> | string
-  status?: Prisma.EnumFlowRunStatusFilter<"FlowRun"> | $Enums.FlowRunStatus
-  duration?: Prisma.IntNullableFilter<"FlowRun"> | number | null
-  error?: Prisma.StringNullableFilter<"FlowRun"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"FlowRun"> | Date | string
-}
-
 export type FlowRunCreateWithoutAgentRunsInput = {
   id?: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
+  flowName: string
+  starterAgent: string
+  status: $Enums.RunStatus
   error?: string | null
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
-  flow: Prisma.FlowCreateNestedOneWithoutFlowRunsInput
+  deletedAt?: Date | string | null
 }
 
 export type FlowRunUncheckedCreateWithoutAgentRunsInput = {
   id?: string
-  flowId: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
+  flowName: string
+  starterAgent: string
+  status: $Enums.RunStatus
   error?: string | null
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type FlowRunCreateOrConnectWithoutAgentRunsInput = {
@@ -555,54 +541,28 @@ export type FlowRunUpdateToOneWithWhereWithoutAgentRunsInput = {
 
 export type FlowRunUpdateWithoutAgentRunsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flowName?: Prisma.StringFieldUpdateOperationsInput | string
+  starterAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  flow?: Prisma.FlowUpdateOneRequiredWithoutFlowRunsNestedInput
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type FlowRunUncheckedUpdateWithoutAgentRunsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  flowId?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  flowName?: Prisma.StringFieldUpdateOperationsInput | string
+  starterAgent?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
   error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type FlowRunCreateManyFlowInput = {
-  id?: string
-  status: $Enums.FlowRunStatus
-  duration?: number | null
-  error?: string | null
-  createdAt?: Date | string
-}
-
-export type FlowRunUpdateWithoutFlowInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  agentRuns?: Prisma.AgentRunUpdateManyWithoutFlowRunNestedInput
-}
-
-export type FlowRunUncheckedUpdateWithoutFlowInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  agentRuns?: Prisma.AgentRunUncheckedUpdateManyWithoutFlowRunNestedInput
-}
-
-export type FlowRunUncheckedUpdateManyWithoutFlowInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.EnumFlowRunStatusFieldUpdateOperationsInput | $Enums.FlowRunStatus
-  duration?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -638,71 +598,82 @@ export type FlowRunCountOutputTypeCountAgentRunsArgs<ExtArgs extends runtime.Typ
 
 export type FlowRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  flowId?: boolean
+  flowName?: boolean
+  starterAgent?: boolean
   status?: boolean
-  duration?: boolean
   error?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
-  flow?: boolean | Prisma.FlowDefaultArgs<ExtArgs>
+  deletedAt?: boolean
   agentRuns?: boolean | Prisma.FlowRun$agentRunsArgs<ExtArgs>
   _count?: boolean | Prisma.FlowRunCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["flowRun"]>
 
 export type FlowRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  flowId?: boolean
+  flowName?: boolean
+  starterAgent?: boolean
   status?: boolean
-  duration?: boolean
   error?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
-  flow?: boolean | Prisma.FlowDefaultArgs<ExtArgs>
+  deletedAt?: boolean
 }, ExtArgs["result"]["flowRun"]>
 
 export type FlowRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
-  flowId?: boolean
+  flowName?: boolean
+  starterAgent?: boolean
   status?: boolean
-  duration?: boolean
   error?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
-  flow?: boolean | Prisma.FlowDefaultArgs<ExtArgs>
+  deletedAt?: boolean
 }, ExtArgs["result"]["flowRun"]>
 
 export type FlowRunSelectScalar = {
   id?: boolean
-  flowId?: boolean
+  flowName?: boolean
+  starterAgent?: boolean
   status?: boolean
-  duration?: boolean
   error?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
 }
 
-export type FlowRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "flowId" | "status" | "duration" | "error" | "createdAt", ExtArgs["result"]["flowRun"]>
+export type FlowRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "flowName" | "starterAgent" | "status" | "error" | "startedAt" | "endedAt" | "durationMs" | "createdAt" | "deletedAt", ExtArgs["result"]["flowRun"]>
 export type FlowRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  flow?: boolean | Prisma.FlowDefaultArgs<ExtArgs>
   agentRuns?: boolean | Prisma.FlowRun$agentRunsArgs<ExtArgs>
   _count?: boolean | Prisma.FlowRunCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type FlowRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  flow?: boolean | Prisma.FlowDefaultArgs<ExtArgs>
-}
-export type FlowRunIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  flow?: boolean | Prisma.FlowDefaultArgs<ExtArgs>
-}
+export type FlowRunIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type FlowRunIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $FlowRunPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FlowRun"
   objects: {
-    flow: Prisma.$FlowPayload<ExtArgs>
     agentRuns: Prisma.$AgentRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
-    flowId: string
-    status: $Enums.FlowRunStatus
-    duration: number | null
+    flowName: string
+    starterAgent: string
+    status: $Enums.RunStatus
     error: string | null
+    startedAt: Date
+    endedAt: Date | null
+    durationMs: number | null
     createdAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["flowRun"]>
   composites: {}
 }
@@ -1097,7 +1068,6 @@ readonly fields: FlowRunFieldRefs;
  */
 export interface Prisma__FlowRunClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  flow<T extends Prisma.FlowDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FlowDefaultArgs<ExtArgs>>): Prisma.Prisma__FlowClient<runtime.Types.Result.GetResult<Prisma.$FlowPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   agentRuns<T extends Prisma.FlowRun$agentRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FlowRun$agentRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AgentRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1129,11 +1099,15 @@ export interface Prisma__FlowRunClient<T, Null = never, ExtArgs extends runtime.
  */
 export interface FlowRunFieldRefs {
   readonly id: Prisma.FieldRef<"FlowRun", 'String'>
-  readonly flowId: Prisma.FieldRef<"FlowRun", 'String'>
-  readonly status: Prisma.FieldRef<"FlowRun", 'FlowRunStatus'>
-  readonly duration: Prisma.FieldRef<"FlowRun", 'Int'>
+  readonly flowName: Prisma.FieldRef<"FlowRun", 'String'>
+  readonly starterAgent: Prisma.FieldRef<"FlowRun", 'String'>
+  readonly status: Prisma.FieldRef<"FlowRun", 'RunStatus'>
   readonly error: Prisma.FieldRef<"FlowRun", 'String'>
+  readonly startedAt: Prisma.FieldRef<"FlowRun", 'DateTime'>
+  readonly endedAt: Prisma.FieldRef<"FlowRun", 'DateTime'>
+  readonly durationMs: Prisma.FieldRef<"FlowRun", 'Int'>
   readonly createdAt: Prisma.FieldRef<"FlowRun", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"FlowRun", 'DateTime'>
 }
     
 
@@ -1388,10 +1362,6 @@ export type FlowRunCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    */
   data: Prisma.FlowRunCreateManyInput | Prisma.FlowRunCreateManyInput[]
   skipDuplicates?: boolean
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.FlowRunIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1462,10 +1432,6 @@ export type FlowRunUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * Limit how many FlowRuns to update.
    */
   limit?: number
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.FlowRunIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**

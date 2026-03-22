@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, TrendingUp, Briefcase, BookOpen, Lightbulb, LogOut } from "lucide-react";
+import { LayoutDashboard, TrendingUp, Briefcase, GitBranch, BookOpen, Lightbulb, LogOut } from "lucide-react";
 import logo from "@/images/algo-s-logo.png";
 import {
   Sidebar,
@@ -22,6 +22,7 @@ const navItems = [
   { label: "Overview", href: "/", icon: LayoutDashboard },
   { label: "Performance", href: "/performance", icon: TrendingUp },
   { label: "Positions", href: "/positions", icon: Briefcase },
+  { label: "Flows", href: "/flows", icon: GitBranch },
   { label: "Knowledge Base", href: "/knowledge-base", icon: BookOpen },
   { label: "Strategies", href: "/strategies", icon: Lightbulb },
 ];

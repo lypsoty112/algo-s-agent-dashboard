@@ -1,12 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@/images/algo-s-logo.png";
-import { LoginForm } from "./login-form";
 import { SystemStatsPanel } from "@/components/system-stats";
 
-export default function LoginPage() {
+export default function NotFound() {
   return (
     <div className="min-h-screen flex">
-      {/* Left — login panel */}
+      {/* Left — 404 panel */}
       <div className="flex flex-col justify-center items-center w-full lg:w-[42%] bg-background px-8 py-12">
         <div className="w-full max-w-sm">
           {/* Logo */}
@@ -22,15 +22,21 @@ export default function LoginPage() {
 
           {/* Heading */}
           <div className="mb-8">
+            <p className="text-sm font-mono text-zinc-400 mb-2">404</p>
             <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 leading-tight">
-              Welcome back
+              Page not found
             </h1>
             <p className="text-zinc-500 text-sm mt-2">
-              Exclusive access.
+              The page you&apos;re looking for doesn&apos;t exist or has been moved.
             </p>
           </div>
 
-          <LoginForm />
+          <Link
+            href="/"
+            className="inline-flex items-center justify-center rounded-lg bg-zinc-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-zinc-800"
+          >
+            Back to Dashboard
+          </Link>
         </div>
       </div>
 

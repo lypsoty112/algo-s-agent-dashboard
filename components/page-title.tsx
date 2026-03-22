@@ -12,6 +12,7 @@ const PAGE_NAMES: Record<string, string> = {
   "/": "Overview",
   "/performance": "Performance",
   "/positions": "Positions",
+  "/flows": "Flows",
   "/knowledge-base": "Knowledge Base",
   "/strategies": "Strategies",
 };

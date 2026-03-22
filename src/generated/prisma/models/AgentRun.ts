@@ -27,87 +27,155 @@ export type AggregateAgentRun = {
 }
 
 export type AgentRunAvgAggregateOutputType = {
-  tokens: number | null
   stepCount: number | null
+  promptTokens: number | null
+  completionTokens: number | null
+  durationMs: number | null
 }
 
 export type AgentRunSumAggregateOutputType = {
-  tokens: number | null
   stepCount: number | null
+  promptTokens: number | null
+  completionTokens: number | null
+  durationMs: number | null
 }
 
 export type AgentRunMinAggregateOutputType = {
   id: string | null
   flowRunId: string | null
-  tokens: number | null
+  agentId: string | null
+  callerId: string | null
+  status: $Enums.RunStatus | null
+  finishReason: string | null
+  error: string | null
   stepCount: number | null
+  promptTokens: number | null
+  completionTokens: number | null
   input: string | null
   outputSummary: string | null
+  startedAt: Date | null
+  endedAt: Date | null
+  durationMs: number | null
   createdAt: Date | null
+  deletedAt: Date | null
 }
 
 export type AgentRunMaxAggregateOutputType = {
   id: string | null
   flowRunId: string | null
-  tokens: number | null
+  agentId: string | null
+  callerId: string | null
+  status: $Enums.RunStatus | null
+  finishReason: string | null
+  error: string | null
   stepCount: number | null
+  promptTokens: number | null
+  completionTokens: number | null
   input: string | null
   outputSummary: string | null
+  startedAt: Date | null
+  endedAt: Date | null
+  durationMs: number | null
   createdAt: Date | null
+  deletedAt: Date | null
 }
 
 export type AgentRunCountAggregateOutputType = {
   id: number
   flowRunId: number
-  tokens: number
+  agentId: number
+  callerId: number
+  status: number
+  finishReason: number
+  error: number
   stepCount: number
+  promptTokens: number
+  completionTokens: number
   input: number
   outputSummary: number
-  callerChain: number
+  steps: number
+  startedAt: number
+  endedAt: number
+  durationMs: number
   createdAt: number
+  deletedAt: number
   _all: number
 }
 
 
 export type AgentRunAvgAggregateInputType = {
-  tokens?: true
   stepCount?: true
+  promptTokens?: true
+  completionTokens?: true
+  durationMs?: true
 }
 
 export type AgentRunSumAggregateInputType = {
-  tokens?: true
   stepCount?: true
+  promptTokens?: true
+  completionTokens?: true
+  durationMs?: true
 }
 
 export type AgentRunMinAggregateInputType = {
   id?: true
   flowRunId?: true
-  tokens?: true
+  agentId?: true
+  callerId?: true
+  status?: true
+  finishReason?: true
+  error?: true
   stepCount?: true
+  promptTokens?: true
+  completionTokens?: true
   input?: true
   outputSummary?: true
+  startedAt?: true
+  endedAt?: true
+  durationMs?: true
   createdAt?: true
+  deletedAt?: true
 }
 
 export type AgentRunMaxAggregateInputType = {
   id?: true
   flowRunId?: true
-  tokens?: true
+  agentId?: true
+  callerId?: true
+  status?: true
+  finishReason?: true
+  error?: true
   stepCount?: true
+  promptTokens?: true
+  completionTokens?: true
   input?: true
   outputSummary?: true
+  startedAt?: true
+  endedAt?: true
+  durationMs?: true
   createdAt?: true
+  deletedAt?: true
 }
 
 export type AgentRunCountAggregateInputType = {
   id?: true
   flowRunId?: true
-  tokens?: true
+  agentId?: true
+  callerId?: true
+  status?: true
+  finishReason?: true
+  error?: true
   stepCount?: true
+  promptTokens?: true
+  completionTokens?: true
   input?: true
   outputSummary?: true
-  callerChain?: true
+  steps?: true
+  startedAt?: true
+  endedAt?: true
+  durationMs?: true
   createdAt?: true
+  deletedAt?: true
   _all?: true
 }
 
@@ -200,12 +268,22 @@ export type AgentRunGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type AgentRunGroupByOutputType = {
   id: string
   flowRunId: string
-  tokens: number | null
+  agentId: string
+  callerId: string | null
+  status: $Enums.RunStatus
+  finishReason: string | null
+  error: string | null
   stepCount: number | null
+  promptTokens: number | null
+  completionTokens: number | null
   input: string | null
   outputSummary: string | null
-  callerChain: runtime.JsonValue | null
+  steps: runtime.JsonValue | null
+  startedAt: Date
+  endedAt: Date | null
+  durationMs: number | null
   createdAt: Date
+  deletedAt: Date | null
   _count: AgentRunCountAggregateOutputType | null
   _avg: AgentRunAvgAggregateOutputType | null
   _sum: AgentRunSumAggregateOutputType | null
@@ -234,24 +312,44 @@ export type AgentRunWhereInput = {
   NOT?: Prisma.AgentRunWhereInput | Prisma.AgentRunWhereInput[]
   id?: Prisma.StringFilter<"AgentRun"> | string
   flowRunId?: Prisma.StringFilter<"AgentRun"> | string
-  tokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  agentId?: Prisma.StringFilter<"AgentRun"> | string
+  callerId?: Prisma.StringNullableFilter<"AgentRun"> | string | null
+  status?: Prisma.EnumRunStatusFilter<"AgentRun"> | $Enums.RunStatus
+  finishReason?: Prisma.StringNullableFilter<"AgentRun"> | string | null
+  error?: Prisma.StringNullableFilter<"AgentRun"> | string | null
   stepCount?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  promptTokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  completionTokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
   input?: Prisma.StringNullableFilter<"AgentRun"> | string | null
   outputSummary?: Prisma.StringNullableFilter<"AgentRun"> | string | null
-  callerChain?: Prisma.JsonNullableFilter<"AgentRun">
+  steps?: Prisma.JsonNullableFilter<"AgentRun">
+  startedAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableFilter<"AgentRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableFilter<"AgentRun"> | number | null
   createdAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"AgentRun"> | Date | string | null
   flowRun?: Prisma.XOR<Prisma.FlowRunScalarRelationFilter, Prisma.FlowRunWhereInput>
 }
 
 export type AgentRunOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   flowRunId?: Prisma.SortOrder
-  tokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  agentId?: Prisma.SortOrder
+  callerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  finishReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  error?: Prisma.SortOrderInput | Prisma.SortOrder
   stepCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  promptTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  completionTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   input?: Prisma.SortOrderInput | Prisma.SortOrder
   outputSummary?: Prisma.SortOrderInput | Prisma.SortOrder
-  callerChain?: Prisma.SortOrderInput | Prisma.SortOrder
+  steps?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationMs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   flowRun?: Prisma.FlowRunOrderByWithRelationInput
 }
 
@@ -261,24 +359,44 @@ export type AgentRunWhereUniqueInput = Prisma.AtLeast<{
   OR?: Prisma.AgentRunWhereInput[]
   NOT?: Prisma.AgentRunWhereInput | Prisma.AgentRunWhereInput[]
   flowRunId?: Prisma.StringFilter<"AgentRun"> | string
-  tokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  agentId?: Prisma.StringFilter<"AgentRun"> | string
+  callerId?: Prisma.StringNullableFilter<"AgentRun"> | string | null
+  status?: Prisma.EnumRunStatusFilter<"AgentRun"> | $Enums.RunStatus
+  finishReason?: Prisma.StringNullableFilter<"AgentRun"> | string | null
+  error?: Prisma.StringNullableFilter<"AgentRun"> | string | null
   stepCount?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  promptTokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  completionTokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
   input?: Prisma.StringNullableFilter<"AgentRun"> | string | null
   outputSummary?: Prisma.StringNullableFilter<"AgentRun"> | string | null
-  callerChain?: Prisma.JsonNullableFilter<"AgentRun">
+  steps?: Prisma.JsonNullableFilter<"AgentRun">
+  startedAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableFilter<"AgentRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableFilter<"AgentRun"> | number | null
   createdAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"AgentRun"> | Date | string | null
   flowRun?: Prisma.XOR<Prisma.FlowRunScalarRelationFilter, Prisma.FlowRunWhereInput>
 }, "id">
 
 export type AgentRunOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   flowRunId?: Prisma.SortOrder
-  tokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  agentId?: Prisma.SortOrder
+  callerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  status?: Prisma.SortOrder
+  finishReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  error?: Prisma.SortOrderInput | Prisma.SortOrder
   stepCount?: Prisma.SortOrderInput | Prisma.SortOrder
+  promptTokens?: Prisma.SortOrderInput | Prisma.SortOrder
+  completionTokens?: Prisma.SortOrderInput | Prisma.SortOrder
   input?: Prisma.SortOrderInput | Prisma.SortOrder
   outputSummary?: Prisma.SortOrderInput | Prisma.SortOrder
-  callerChain?: Prisma.SortOrderInput | Prisma.SortOrder
+  steps?: Prisma.SortOrderInput | Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  durationMs?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AgentRunCountOrderByAggregateInput
   _avg?: Prisma.AgentRunAvgOrderByAggregateInput
   _max?: Prisma.AgentRunMaxOrderByAggregateInput
@@ -292,88 +410,168 @@ export type AgentRunScalarWhereWithAggregatesInput = {
   NOT?: Prisma.AgentRunScalarWhereWithAggregatesInput | Prisma.AgentRunScalarWhereWithAggregatesInput[]
   id?: Prisma.StringWithAggregatesFilter<"AgentRun"> | string
   flowRunId?: Prisma.StringWithAggregatesFilter<"AgentRun"> | string
-  tokens?: Prisma.IntNullableWithAggregatesFilter<"AgentRun"> | number | null
+  agentId?: Prisma.StringWithAggregatesFilter<"AgentRun"> | string
+  callerId?: Prisma.StringNullableWithAggregatesFilter<"AgentRun"> | string | null
+  status?: Prisma.EnumRunStatusWithAggregatesFilter<"AgentRun"> | $Enums.RunStatus
+  finishReason?: Prisma.StringNullableWithAggregatesFilter<"AgentRun"> | string | null
+  error?: Prisma.StringNullableWithAggregatesFilter<"AgentRun"> | string | null
   stepCount?: Prisma.IntNullableWithAggregatesFilter<"AgentRun"> | number | null
+  promptTokens?: Prisma.IntNullableWithAggregatesFilter<"AgentRun"> | number | null
+  completionTokens?: Prisma.IntNullableWithAggregatesFilter<"AgentRun"> | number | null
   input?: Prisma.StringNullableWithAggregatesFilter<"AgentRun"> | string | null
   outputSummary?: Prisma.StringNullableWithAggregatesFilter<"AgentRun"> | string | null
-  callerChain?: Prisma.JsonNullableWithAggregatesFilter<"AgentRun">
+  steps?: Prisma.JsonNullableWithAggregatesFilter<"AgentRun">
+  startedAt?: Prisma.DateTimeWithAggregatesFilter<"AgentRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AgentRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableWithAggregatesFilter<"AgentRun"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"AgentRun"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"AgentRun"> | Date | string | null
 }
 
 export type AgentRunCreateInput = {
   id?: string
-  tokens?: number | null
+  agentId: string
+  callerId?: string | null
+  status: $Enums.RunStatus
+  finishReason?: string | null
+  error?: string | null
   stepCount?: number | null
+  promptTokens?: number | null
+  completionTokens?: number | null
   input?: string | null
   outputSummary?: string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
   flowRun: Prisma.FlowRunCreateNestedOneWithoutAgentRunsInput
 }
 
 export type AgentRunUncheckedCreateInput = {
   id?: string
   flowRunId: string
-  tokens?: number | null
+  agentId: string
+  callerId?: string | null
+  status: $Enums.RunStatus
+  finishReason?: string | null
+  error?: string | null
   stepCount?: number | null
+  promptTokens?: number | null
+  completionTokens?: number | null
   input?: string | null
   outputSummary?: string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type AgentRunUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   flowRun?: Prisma.FlowRunUpdateOneRequiredWithoutAgentRunsNestedInput
 }
 
 export type AgentRunUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   flowRunId?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AgentRunCreateManyInput = {
   id?: string
   flowRunId: string
-  tokens?: number | null
+  agentId: string
+  callerId?: string | null
+  status: $Enums.RunStatus
+  finishReason?: string | null
+  error?: string | null
   stepCount?: number | null
+  promptTokens?: number | null
+  completionTokens?: number | null
   input?: string | null
   outputSummary?: string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type AgentRunUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AgentRunUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   flowRunId?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AgentRunListRelationFilter = {
@@ -389,42 +587,76 @@ export type AgentRunOrderByRelationAggregateInput = {
 export type AgentRunCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   flowRunId?: Prisma.SortOrder
-  tokens?: Prisma.SortOrder
+  agentId?: Prisma.SortOrder
+  callerId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  finishReason?: Prisma.SortOrder
+  error?: Prisma.SortOrder
   stepCount?: Prisma.SortOrder
+  promptTokens?: Prisma.SortOrder
+  completionTokens?: Prisma.SortOrder
   input?: Prisma.SortOrder
   outputSummary?: Prisma.SortOrder
-  callerChain?: Prisma.SortOrder
+  steps?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type AgentRunAvgOrderByAggregateInput = {
-  tokens?: Prisma.SortOrder
   stepCount?: Prisma.SortOrder
+  promptTokens?: Prisma.SortOrder
+  completionTokens?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
 }
 
 export type AgentRunMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   flowRunId?: Prisma.SortOrder
-  tokens?: Prisma.SortOrder
+  agentId?: Prisma.SortOrder
+  callerId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  finishReason?: Prisma.SortOrder
+  error?: Prisma.SortOrder
   stepCount?: Prisma.SortOrder
+  promptTokens?: Prisma.SortOrder
+  completionTokens?: Prisma.SortOrder
   input?: Prisma.SortOrder
   outputSummary?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type AgentRunMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   flowRunId?: Prisma.SortOrder
-  tokens?: Prisma.SortOrder
+  agentId?: Prisma.SortOrder
+  callerId?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  finishReason?: Prisma.SortOrder
+  error?: Prisma.SortOrder
   stepCount?: Prisma.SortOrder
+  promptTokens?: Prisma.SortOrder
+  completionTokens?: Prisma.SortOrder
   input?: Prisma.SortOrder
   outputSummary?: Prisma.SortOrder
+  startedAt?: Prisma.SortOrder
+  endedAt?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
+  deletedAt?: Prisma.SortOrder
 }
 
 export type AgentRunSumOrderByAggregateInput = {
-  tokens?: Prisma.SortOrder
   stepCount?: Prisma.SortOrder
+  promptTokens?: Prisma.SortOrder
+  completionTokens?: Prisma.SortOrder
+  durationMs?: Prisma.SortOrder
 }
 
 export type AgentRunCreateNestedManyWithoutFlowRunInput = {
@@ -471,22 +703,42 @@ export type AgentRunUncheckedUpdateManyWithoutFlowRunNestedInput = {
 
 export type AgentRunCreateWithoutFlowRunInput = {
   id?: string
-  tokens?: number | null
+  agentId: string
+  callerId?: string | null
+  status: $Enums.RunStatus
+  finishReason?: string | null
+  error?: string | null
   stepCount?: number | null
+  promptTokens?: number | null
+  completionTokens?: number | null
   input?: string | null
   outputSummary?: string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type AgentRunUncheckedCreateWithoutFlowRunInput = {
   id?: string
-  tokens?: number | null
+  agentId: string
+  callerId?: string | null
+  status: $Enums.RunStatus
+  finishReason?: string | null
+  error?: string | null
   stepCount?: number | null
+  promptTokens?: number | null
+  completionTokens?: number | null
   input?: string | null
   outputSummary?: string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type AgentRunCreateOrConnectWithoutFlowRunInput = {
@@ -521,52 +773,102 @@ export type AgentRunScalarWhereInput = {
   NOT?: Prisma.AgentRunScalarWhereInput | Prisma.AgentRunScalarWhereInput[]
   id?: Prisma.StringFilter<"AgentRun"> | string
   flowRunId?: Prisma.StringFilter<"AgentRun"> | string
-  tokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  agentId?: Prisma.StringFilter<"AgentRun"> | string
+  callerId?: Prisma.StringNullableFilter<"AgentRun"> | string | null
+  status?: Prisma.EnumRunStatusFilter<"AgentRun"> | $Enums.RunStatus
+  finishReason?: Prisma.StringNullableFilter<"AgentRun"> | string | null
+  error?: Prisma.StringNullableFilter<"AgentRun"> | string | null
   stepCount?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  promptTokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
+  completionTokens?: Prisma.IntNullableFilter<"AgentRun"> | number | null
   input?: Prisma.StringNullableFilter<"AgentRun"> | string | null
   outputSummary?: Prisma.StringNullableFilter<"AgentRun"> | string | null
-  callerChain?: Prisma.JsonNullableFilter<"AgentRun">
+  steps?: Prisma.JsonNullableFilter<"AgentRun">
+  startedAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
+  endedAt?: Prisma.DateTimeNullableFilter<"AgentRun"> | Date | string | null
+  durationMs?: Prisma.IntNullableFilter<"AgentRun"> | number | null
   createdAt?: Prisma.DateTimeFilter<"AgentRun"> | Date | string
+  deletedAt?: Prisma.DateTimeNullableFilter<"AgentRun"> | Date | string | null
 }
 
 export type AgentRunCreateManyFlowRunInput = {
   id?: string
-  tokens?: number | null
+  agentId: string
+  callerId?: string | null
+  status: $Enums.RunStatus
+  finishReason?: string | null
+  error?: string | null
   stepCount?: number | null
+  promptTokens?: number | null
+  completionTokens?: number | null
   input?: string | null
   outputSummary?: string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt: Date | string
+  endedAt?: Date | string | null
+  durationMs?: number | null
   createdAt?: Date | string
+  deletedAt?: Date | string | null
 }
 
 export type AgentRunUpdateWithoutFlowRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AgentRunUncheckedUpdateWithoutFlowRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AgentRunUncheckedUpdateManyWithoutFlowRunInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
-  tokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  agentId?: Prisma.StringFieldUpdateOperationsInput | string
+  callerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumRunStatusFieldUpdateOperationsInput | $Enums.RunStatus
+  finishReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  error?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   stepCount?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  promptTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  completionTokens?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   input?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   outputSummary?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  callerChain?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  durationMs?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -574,51 +876,91 @@ export type AgentRunUncheckedUpdateManyWithoutFlowRunInput = {
 export type AgentRunSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   flowRunId?: boolean
-  tokens?: boolean
+  agentId?: boolean
+  callerId?: boolean
+  status?: boolean
+  finishReason?: boolean
+  error?: boolean
   stepCount?: boolean
+  promptTokens?: boolean
+  completionTokens?: boolean
   input?: boolean
   outputSummary?: boolean
-  callerChain?: boolean
+  steps?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   flowRun?: boolean | Prisma.FlowRunDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["agentRun"]>
 
 export type AgentRunSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   flowRunId?: boolean
-  tokens?: boolean
+  agentId?: boolean
+  callerId?: boolean
+  status?: boolean
+  finishReason?: boolean
+  error?: boolean
   stepCount?: boolean
+  promptTokens?: boolean
+  completionTokens?: boolean
   input?: boolean
   outputSummary?: boolean
-  callerChain?: boolean
+  steps?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   flowRun?: boolean | Prisma.FlowRunDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["agentRun"]>
 
 export type AgentRunSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   flowRunId?: boolean
-  tokens?: boolean
+  agentId?: boolean
+  callerId?: boolean
+  status?: boolean
+  finishReason?: boolean
+  error?: boolean
   stepCount?: boolean
+  promptTokens?: boolean
+  completionTokens?: boolean
   input?: boolean
   outputSummary?: boolean
-  callerChain?: boolean
+  steps?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
   flowRun?: boolean | Prisma.FlowRunDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["agentRun"]>
 
 export type AgentRunSelectScalar = {
   id?: boolean
   flowRunId?: boolean
-  tokens?: boolean
+  agentId?: boolean
+  callerId?: boolean
+  status?: boolean
+  finishReason?: boolean
+  error?: boolean
   stepCount?: boolean
+  promptTokens?: boolean
+  completionTokens?: boolean
   input?: boolean
   outputSummary?: boolean
-  callerChain?: boolean
+  steps?: boolean
+  startedAt?: boolean
+  endedAt?: boolean
+  durationMs?: boolean
   createdAt?: boolean
+  deletedAt?: boolean
 }
 
-export type AgentRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "flowRunId" | "tokens" | "stepCount" | "input" | "outputSummary" | "callerChain" | "createdAt", ExtArgs["result"]["agentRun"]>
+export type AgentRunOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "flowRunId" | "agentId" | "callerId" | "status" | "finishReason" | "error" | "stepCount" | "promptTokens" | "completionTokens" | "input" | "outputSummary" | "steps" | "startedAt" | "endedAt" | "durationMs" | "createdAt" | "deletedAt", ExtArgs["result"]["agentRun"]>
 export type AgentRunInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   flowRun?: boolean | Prisma.FlowRunDefaultArgs<ExtArgs>
 }
@@ -637,12 +979,22 @@ export type $AgentRunPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     flowRunId: string
-    tokens: number | null
+    agentId: string
+    callerId: string | null
+    status: $Enums.RunStatus
+    finishReason: string | null
+    error: string | null
     stepCount: number | null
+    promptTokens: number | null
+    completionTokens: number | null
     input: string | null
     outputSummary: string | null
-    callerChain: runtime.JsonValue | null
+    steps: runtime.JsonValue | null
+    startedAt: Date
+    endedAt: Date | null
+    durationMs: number | null
     createdAt: Date
+    deletedAt: Date | null
   }, ExtArgs["result"]["agentRun"]>
   composites: {}
 }
@@ -1069,12 +1421,22 @@ export interface Prisma__AgentRunClient<T, Null = never, ExtArgs extends runtime
 export interface AgentRunFieldRefs {
   readonly id: Prisma.FieldRef<"AgentRun", 'String'>
   readonly flowRunId: Prisma.FieldRef<"AgentRun", 'String'>
-  readonly tokens: Prisma.FieldRef<"AgentRun", 'Int'>
+  readonly agentId: Prisma.FieldRef<"AgentRun", 'String'>
+  readonly callerId: Prisma.FieldRef<"AgentRun", 'String'>
+  readonly status: Prisma.FieldRef<"AgentRun", 'RunStatus'>
+  readonly finishReason: Prisma.FieldRef<"AgentRun", 'String'>
+  readonly error: Prisma.FieldRef<"AgentRun", 'String'>
   readonly stepCount: Prisma.FieldRef<"AgentRun", 'Int'>
+  readonly promptTokens: Prisma.FieldRef<"AgentRun", 'Int'>
+  readonly completionTokens: Prisma.FieldRef<"AgentRun", 'Int'>
   readonly input: Prisma.FieldRef<"AgentRun", 'String'>
   readonly outputSummary: Prisma.FieldRef<"AgentRun", 'String'>
-  readonly callerChain: Prisma.FieldRef<"AgentRun", 'Json'>
+  readonly steps: Prisma.FieldRef<"AgentRun", 'Json'>
+  readonly startedAt: Prisma.FieldRef<"AgentRun", 'DateTime'>
+  readonly endedAt: Prisma.FieldRef<"AgentRun", 'DateTime'>
+  readonly durationMs: Prisma.FieldRef<"AgentRun", 'Int'>
   readonly createdAt: Prisma.FieldRef<"AgentRun", 'DateTime'>
+  readonly deletedAt: Prisma.FieldRef<"AgentRun", 'DateTime'>
 }
     
 

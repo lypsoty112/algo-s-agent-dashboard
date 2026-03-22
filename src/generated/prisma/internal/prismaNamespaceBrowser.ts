@@ -51,7 +51,6 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  Flow: 'Flow',
   KnowledgeBase: 'KnowledgeBase',
   Strategy: 'Strategy',
   TradeHistory: 'TradeHistory',
@@ -73,19 +72,6 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 } as const)
 
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
-
-
-export const FlowScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  info: 'info',
-  createdBy: 'createdBy',
-  enabled: 'enabled',
-  createdAt: 'createdAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type FlowScalarFieldEnum = (typeof FlowScalarFieldEnum)[keyof typeof FlowScalarFieldEnum]
 
 
 export const KnowledgeBaseScalarFieldEnum = {
@@ -144,11 +130,15 @@ export type TradeHistoryScalarFieldEnum = (typeof TradeHistoryScalarFieldEnum)[k
 
 export const FlowRunScalarFieldEnum = {
   id: 'id',
-  flowId: 'flowId',
+  flowName: 'flowName',
+  starterAgent: 'starterAgent',
   status: 'status',
-  duration: 'duration',
   error: 'error',
-  createdAt: 'createdAt'
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type FlowRunScalarFieldEnum = (typeof FlowRunScalarFieldEnum)[keyof typeof FlowRunScalarFieldEnum]
@@ -157,12 +147,22 @@ export type FlowRunScalarFieldEnum = (typeof FlowRunScalarFieldEnum)[keyof typeo
 export const AgentRunScalarFieldEnum = {
   id: 'id',
   flowRunId: 'flowRunId',
-  tokens: 'tokens',
+  agentId: 'agentId',
+  callerId: 'callerId',
+  status: 'status',
+  finishReason: 'finishReason',
+  error: 'error',
   stepCount: 'stepCount',
+  promptTokens: 'promptTokens',
+  completionTokens: 'completionTokens',
   input: 'input',
   outputSummary: 'outputSummary',
-  callerChain: 'callerChain',
-  createdAt: 'createdAt'
+  steps: 'steps',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type AgentRunScalarFieldEnum = (typeof AgentRunScalarFieldEnum)[keyof typeof AgentRunScalarFieldEnum]
@@ -174,13 +174,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {
@@ -199,6 +192,14 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -206,12 +207,4 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

@@ -64,11 +64,10 @@ export const AlpacaOrderType = {
 export type AlpacaOrderType = (typeof AlpacaOrderType)[keyof typeof AlpacaOrderType]
 
 
-export const FlowRunStatus = {
-  pending: 'pending',
+export const RunStatus = {
   running: 'running',
   completed: 'completed',
   failed: 'failed'
 } as const
 
-export type FlowRunStatus = (typeof FlowRunStatus)[keyof typeof FlowRunStatus]
+export type RunStatus = (typeof RunStatus)[keyof typeof RunStatus]

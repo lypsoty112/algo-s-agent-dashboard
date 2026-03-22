@@ -384,7 +384,6 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
-  Flow: 'Flow',
   KnowledgeBase: 'KnowledgeBase',
   Strategy: 'Strategy',
   TradeHistory: 'TradeHistory',
@@ -405,84 +404,10 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "flow" | "knowledgeBase" | "strategy" | "tradeHistory" | "flowRun" | "agentRun"
+    modelProps: "knowledgeBase" | "strategy" | "tradeHistory" | "flowRun" | "agentRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
-    Flow: {
-      payload: Prisma.$FlowPayload<ExtArgs>
-      fields: Prisma.FlowFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.FlowFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.FlowFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
-        }
-        findFirst: {
-          args: Prisma.FlowFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.FlowFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
-        }
-        findMany: {
-          args: Prisma.FlowFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>[]
-        }
-        create: {
-          args: Prisma.FlowCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
-        }
-        createMany: {
-          args: Prisma.FlowCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.FlowCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>[]
-        }
-        delete: {
-          args: Prisma.FlowDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
-        }
-        update: {
-          args: Prisma.FlowUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
-        }
-        deleteMany: {
-          args: Prisma.FlowDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.FlowUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.FlowUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>[]
-        }
-        upsert: {
-          args: Prisma.FlowUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
-        }
-        aggregate: {
-          args: Prisma.FlowAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateFlow>
-        }
-        groupBy: {
-          args: Prisma.FlowGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FlowGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.FlowCountArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.FlowCountAggregateOutputType> | number
-        }
-      }
-    }
     KnowledgeBase: {
       payload: Prisma.$KnowledgeBasePayload<ExtArgs>
       fields: Prisma.KnowledgeBaseFieldRefs
@@ -892,19 +817,6 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const FlowScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  info: 'info',
-  createdBy: 'createdBy',
-  enabled: 'enabled',
-  createdAt: 'createdAt',
-  deletedAt: 'deletedAt'
-} as const
-
-export type FlowScalarFieldEnum = (typeof FlowScalarFieldEnum)[keyof typeof FlowScalarFieldEnum]
-
-
 export const KnowledgeBaseScalarFieldEnum = {
   id: 'id',
   category: 'category',
@@ -961,11 +873,15 @@ export type TradeHistoryScalarFieldEnum = (typeof TradeHistoryScalarFieldEnum)[k
 
 export const FlowRunScalarFieldEnum = {
   id: 'id',
-  flowId: 'flowId',
+  flowName: 'flowName',
+  starterAgent: 'starterAgent',
   status: 'status',
-  duration: 'duration',
   error: 'error',
-  createdAt: 'createdAt'
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type FlowRunScalarFieldEnum = (typeof FlowRunScalarFieldEnum)[keyof typeof FlowRunScalarFieldEnum]
@@ -974,12 +890,22 @@ export type FlowRunScalarFieldEnum = (typeof FlowRunScalarFieldEnum)[keyof typeo
 export const AgentRunScalarFieldEnum = {
   id: 'id',
   flowRunId: 'flowRunId',
-  tokens: 'tokens',
+  agentId: 'agentId',
+  callerId: 'callerId',
+  status: 'status',
+  finishReason: 'finishReason',
+  error: 'error',
   stepCount: 'stepCount',
+  promptTokens: 'promptTokens',
+  completionTokens: 'completionTokens',
   input: 'input',
   outputSummary: 'outputSummary',
-  callerChain: 'callerChain',
-  createdAt: 'createdAt'
+  steps: 'steps',
+  startedAt: 'startedAt',
+  endedAt: 'endedAt',
+  durationMs: 'durationMs',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
 } as const
 
 export type AgentRunScalarFieldEnum = (typeof AgentRunScalarFieldEnum)[keyof typeof AgentRunScalarFieldEnum]
@@ -991,13 +917,6 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
-
-
-export const JsonNullValueInput = {
-  JsonNull: JsonNull
-} as const
-
-export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {
@@ -1016,6 +935,14 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 export const JsonNullValueFilter = {
   DbNull: DbNull,
   JsonNull: JsonNull,
@@ -1023,14 +950,6 @@ export const JsonNullValueFilter = {
 } as const
 
 export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
-
-
-export const NullsOrder = {
-  first: 'first',
-  last: 'last'
-} as const
-
-export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
 
@@ -1054,23 +973,16 @@ export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
 
 
 /**
- * Reference to a field of type 'Json'
+ * Reference to a field of type 'KnowledgeBaseCategory'
  */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+export type EnumKnowledgeBaseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeBaseCategory'>
     
 
 
 /**
- * Reference to a field of type 'QueryMode'
+ * Reference to a field of type 'KnowledgeBaseCategory[]'
  */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+export type ListEnumKnowledgeBaseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeBaseCategory[]'>
     
 
 
@@ -1085,20 +997,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-/**
- * Reference to a field of type 'KnowledgeBaseCategory'
- */
-export type EnumKnowledgeBaseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeBaseCategory'>
-    
-
-
-/**
- * Reference to a field of type 'KnowledgeBaseCategory[]'
- */
-export type ListEnumKnowledgeBaseCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'KnowledgeBaseCategory[]'>
     
 
 
@@ -1173,16 +1071,16 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
- * Reference to a field of type 'FlowRunStatus'
+ * Reference to a field of type 'RunStatus'
  */
-export type EnumFlowRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowRunStatus'>
+export type EnumRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunStatus'>
     
 
 
 /**
- * Reference to a field of type 'FlowRunStatus[]'
+ * Reference to a field of type 'RunStatus[]'
  */
-export type ListEnumFlowRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FlowRunStatus[]'>
+export type ListEnumRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunStatus[]'>
     
 
 
@@ -1197,6 +1095,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1308,7 +1220,6 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
-  flow?: Prisma.FlowOmit
   knowledgeBase?: Prisma.KnowledgeBaseOmit
   strategy?: Prisma.StrategyOmit
   tradeHistory?: Prisma.TradeHistoryOmit

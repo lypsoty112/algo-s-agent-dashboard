@@ -371,8 +371,20 @@ export type KnowledgeBaseMinOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
 }
 
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
 export type EnumKnowledgeBaseCategoryFieldUpdateOperationsInput = {
   set?: $Enums.KnowledgeBaseCategory
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 

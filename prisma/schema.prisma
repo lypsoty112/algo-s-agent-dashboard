@@ -9,21 +9,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// --- Flows (Section 2 & 5): flowStarter reads due flows; schedule, starter agent/prompt live in info JSON
-model Flow {
-  id         String    @id @default(uuid())
-  name       String    @map("name")
-  info       Json      @map("info") // schedule, starterAgent, starterPrompt, etc.
-  createdBy  String    @map("created_by") // "system" or agent ID
-  enabled    Boolean   @default(true)
-  createdAt  DateTime  @default(now()) @map("created_at")
-  deletedAt  DateTime? @map("deleted_at")
-
-  flowRuns   FlowRun[]
-
-  @@map("flows")
-}
-
 // --- Knowledge base (Section 5): Memory Manager Agent is sole writer
 model KnowledgeBase {
   id          String    @id @default(uuid())
@@ -123,21 +108,23 @@ enum AlpacaOrderType {
 
 // --- Flow runs: execution log per flow invocation
 model FlowRun {
-  id        String        @id @default(uuid())
-  flowId    String        @map("flow_id")
-  flow      Flow          @relation(fields: [flowId], references: [id])
-  status    FlowRunStatus
-  duration  Int?          // milliseconds
-  error     String?       @db.Text
-  createdAt DateTime      @default(now()) @map("created_at")
+  id           String    @id @default(uuid())
+  flowName     String    @map("flow_name")
+  starterAgent String    @map("starter_agent")
+  status       RunStatus
+  error        String?   @db.Text
+  startedAt    DateTime  @map("started_at")
+  endedAt      DateTime? @map("ended_at")
+  durationMs   Int?      @map("duration_ms")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  deletedAt    DateTime? @map("deleted_at")
 
-  agentRuns AgentRun[]
+  agentRuns    AgentRun[]
 
   @@map("flow_runs")
 }
 
-enum FlowRunStatus {
-  pending
+enum RunStatus {
   running
   completed
   failed
@@ -145,15 +132,25 @@ enum FlowRunStatus {
 
 // --- Agent runs: per-agent execution log, child of flow_run
 model AgentRun {
-  id            String   @id @default(uuid())
-  flowRunId     String   @map("flow_run_id")
-  flowRun       FlowRun  @relation(fields: [flowRunId], references: [id])
-  tokens        Int?
-  stepCount     Int?     @map("step_count")
-  input         String?  @db.Text
-  outputSummary String?  @map("output_summary") @db.Text
-  callerChain   Json?    @map("caller_chain")
-  createdAt     DateTime @default(now()) @map("created_at")
+  id               String    @id @default(uuid())
+  flowRunId        String    @map("flow_run_id")
+  flowRun          FlowRun   @relation(fields: [flowRunId], references: [id])
+  agentId          String    @map("agent_id")
+  callerId         String?   @map("caller_id")
+  status           RunStatus
+  finishReason     String?   @map("finish_reason")
+  error            String?   @db.Text
+  stepCount        Int?      @map("step_count")
+  promptTokens     Int?      @map("prompt_tokens")
+  completionTokens Int?      @map("completion_tokens")
+  input            String?   @db.Text
+  outputSummary    String?   @map("output_summary") @db.Text
+  steps            Json?
+  startedAt        DateTime  @map("started_at")
+  endedAt          DateTime? @map("ended_at")
+  durationMs       Int?      @map("duration_ms")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  deletedAt        DateTime? @map("deleted_at")
 
   @@map("agent_runs")
 }

@@ -16,6 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { FlowCanvas } from "./flow-canvas";
 import { FlowSheet } from "./flow-sheet";
+import { FlowSummaryStrip } from "./flow-summary-strip";
 
 type FlowRunRow = {
   id: string;
@@ -145,6 +146,9 @@ export function FlowsClient() {
 
   return (
     <>
+      {/* Summary Strip */}
+      <FlowSummaryStrip />
+
       {/* Filter Bar */}
       <div className="flex flex-wrap items-center gap-2">
         {STATUS_FILTERS.map((status) => (

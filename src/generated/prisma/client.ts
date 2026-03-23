@@ -57,6 +57,11 @@ export type Strategy = Prisma.StrategyModel
  */
 export type TradeHistory = Prisma.TradeHistoryModel
 /**
+ * Model Flow
+ * 
+ */
+export type Flow = Prisma.FlowModel
+/**
  * Model FlowRun
  * 
  */

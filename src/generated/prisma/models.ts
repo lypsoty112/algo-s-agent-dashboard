@@ -11,6 +11,7 @@
 export type * from './models/KnowledgeBase'
 export type * from './models/Strategy'
 export type * from './models/TradeHistory'
+export type * from './models/Flow'
 export type * from './models/FlowRun'
 export type * from './models/AgentRun'
 export type * from './commonInputTypes'

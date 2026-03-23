@@ -387,6 +387,7 @@ export const ModelName = {
   KnowledgeBase: 'KnowledgeBase',
   Strategy: 'Strategy',
   TradeHistory: 'TradeHistory',
+  Flow: 'Flow',
   FlowRun: 'FlowRun',
   AgentRun: 'AgentRun'
 } as const
@@ -404,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "knowledgeBase" | "strategy" | "tradeHistory" | "flowRun" | "agentRun"
+    modelProps: "knowledgeBase" | "strategy" | "tradeHistory" | "flow" | "flowRun" | "agentRun"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -627,6 +628,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.TradeHistoryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.TradeHistoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    Flow: {
+      payload: Prisma.$FlowPayload<ExtArgs>
+      fields: Prisma.FlowFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FlowFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FlowFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
+        }
+        findFirst: {
+          args: Prisma.FlowFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FlowFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
+        }
+        findMany: {
+          args: Prisma.FlowFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>[]
+        }
+        create: {
+          args: Prisma.FlowCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
+        }
+        createMany: {
+          args: Prisma.FlowCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FlowCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>[]
+        }
+        delete: {
+          args: Prisma.FlowDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
+        }
+        update: {
+          args: Prisma.FlowUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
+        }
+        deleteMany: {
+          args: Prisma.FlowDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FlowUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FlowUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>[]
+        }
+        upsert: {
+          args: Prisma.FlowUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FlowPayload>
+        }
+        aggregate: {
+          args: Prisma.FlowAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFlow>
+        }
+        groupBy: {
+          args: Prisma.FlowGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FlowGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FlowCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FlowCountAggregateOutputType> | number
         }
       }
     }
@@ -871,6 +946,19 @@ export const TradeHistoryScalarFieldEnum = {
 export type TradeHistoryScalarFieldEnum = (typeof TradeHistoryScalarFieldEnum)[keyof typeof TradeHistoryScalarFieldEnum]
 
 
+export const FlowScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  info: 'info',
+  createdBy: 'createdBy',
+  enabled: 'enabled',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FlowScalarFieldEnum = (typeof FlowScalarFieldEnum)[keyof typeof FlowScalarFieldEnum]
+
+
 export const FlowRunScalarFieldEnum = {
   id: 'id',
   flowName: 'flowName',
@@ -917,6 +1005,13 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {
@@ -1071,6 +1166,27 @@ export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'RunStatus'
  */
 export type EnumRunStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RunStatus'>
@@ -1095,20 +1211,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Json'
- */
-export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-/**
- * Reference to a field of type 'QueryMode'
- */
-export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -1223,6 +1325,7 @@ export type GlobalOmitConfig = {
   knowledgeBase?: Prisma.KnowledgeBaseOmit
   strategy?: Prisma.StrategyOmit
   tradeHistory?: Prisma.TradeHistoryOmit
+  flow?: Prisma.FlowOmit
   flowRun?: Prisma.FlowRunOmit
   agentRun?: Prisma.AgentRunOmit
 }

@@ -54,6 +54,7 @@ export const ModelName = {
   KnowledgeBase: 'KnowledgeBase',
   Strategy: 'Strategy',
   TradeHistory: 'TradeHistory',
+  Flow: 'Flow',
   FlowRun: 'FlowRun',
   AgentRun: 'AgentRun'
 } as const
@@ -128,6 +129,19 @@ export const TradeHistoryScalarFieldEnum = {
 export type TradeHistoryScalarFieldEnum = (typeof TradeHistoryScalarFieldEnum)[keyof typeof TradeHistoryScalarFieldEnum]
 
 
+export const FlowScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  info: 'info',
+  createdBy: 'createdBy',
+  enabled: 'enabled',
+  createdAt: 'createdAt',
+  deletedAt: 'deletedAt'
+} as const
+
+export type FlowScalarFieldEnum = (typeof FlowScalarFieldEnum)[keyof typeof FlowScalarFieldEnum]
+
+
 export const FlowRunScalarFieldEnum = {
   id: 'id',
   flowName: 'flowName',
@@ -174,6 +188,13 @@ export const SortOrder = {
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const NullableJsonNullValueInput = {

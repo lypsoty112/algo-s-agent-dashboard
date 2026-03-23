@@ -106,6 +106,19 @@ enum AlpacaOrderType {
   trailing_stop
 }
 
+// --- Flow definitions: scheduled or one-off flow configurations
+model Flow {
+  id        String    @id @default(uuid())
+  name      String
+  info      Json
+  createdBy String    @map("created_by")
+  enabled   Boolean   @default(true)
+  createdAt DateTime  @default(now()) @map("created_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("flows")
+}
+
 // --- Flow runs: execution log per flow invocation
 model FlowRun {
   id           String    @id @default(uuid())

@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { EquityCurve } from "@/components/charts/equity-curve"
+import { formatAsOf } from "@/lib/format"
 
 type BenchmarkData = {
   spy: { timestamps: number[]; values: number[] }
@@ -20,6 +21,8 @@ export function PerformanceClient({ portfolio }: PerformanceClientProps) {
   const [benchmarkData, setBenchmarkData] = useState<BenchmarkData | null>(null)
 
   const firstTs = portfolio.timestamps[0]
+  const lastTs = portfolio.timestamps.at(-1)
+  const asOf = lastTs ? formatAsOf(lastTs) : undefined
 
   useEffect(() => {
     if (!firstTs) return
@@ -40,7 +43,10 @@ export function PerformanceClient({ portfolio }: PerformanceClientProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-sm font-medium">Equity Curve</CardTitle>
+        <div className="flex items-baseline gap-2">
+          <CardTitle className="text-sm font-medium">Equity Curve</CardTitle>
+          {asOf && <span className="text-xs text-muted-foreground font-normal">as of {asOf}</span>}
+        </div>
       </CardHeader>
       <CardContent>
         <EquityCurve

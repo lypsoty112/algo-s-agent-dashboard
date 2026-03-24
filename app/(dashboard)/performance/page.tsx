@@ -15,6 +15,7 @@ import {
   tradeStats,
 } from "@/lib/stats"
 import { PerformanceClient } from "@/components/performance/performance-client"
+import { formatAsOf } from "@/lib/format"
 import { MonthlyReturnsTable } from "@/components/performance/monthly-returns-table"
 import { StatCards } from "@/components/performance/stat-cards"
 import { RiskCards } from "@/components/performance/risk-cards"
@@ -184,6 +185,9 @@ async function getPerformanceData() {
 
 export default async function PerformancePage() {
   const data = await getPerformanceData()
+  const asOf = data.portfolio?.timestamps.at(-1)
+    ? formatAsOf(data.portfolio.timestamps.at(-1)!)
+    : undefined
 
   return (
     <div className="space-y-8">
@@ -195,6 +199,7 @@ export default async function PerformancePage() {
         sortino={data.sortino}
         maxDrawdownPct={data.maxDrawdownPct}
         insufficientData={data.insufficientReturns}
+        asOf={asOf}
       />
 
       {/* Equity curve */}
@@ -220,6 +225,7 @@ export default async function PerformancePage() {
         maxDrawdownPeakDate={data.ddPeakDate}
         maxDrawdownTroughDate={data.ddTroughDate}
         stats={data.stats}
+        asOf={asOf}
       />
 
       {/* Monthly returns table */}

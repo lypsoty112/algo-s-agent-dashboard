@@ -7,6 +7,7 @@ import { KpiStrip } from "@/components/overview/kpi-strip"
 import { SystemSnapshot } from "@/components/overview/system-snapshot"
 import { OverviewClient } from "@/components/overview/overview-client"
 import { Skeleton } from "@/components/ui/skeleton"
+import { formatAsOf } from "@/lib/format"
 
 async function getOverviewData() {
   "use cache"
@@ -137,6 +138,9 @@ async function getOverviewData() {
 
 export default async function OverviewPage() {
   const data = await getOverviewData()
+  const asOf = data.portfolio?.timestamps.at(-1)
+    ? formatAsOf(data.portfolio.timestamps.at(-1)!)
+    : undefined
 
   return (
     <div className="space-y-6">
@@ -148,6 +152,7 @@ export default async function OverviewPage() {
         totalReturn={data.totalReturn}
         winRate={data.winRate}
         totalTrades={data.totalTrades}
+        asOf={asOf}
       />
 
       <div className="grid grid-cols-1 items-stretch gap-6 lg:grid-cols-12">
@@ -180,6 +185,7 @@ export default async function OverviewPage() {
               openPositions={data.openPositions}
               unrealizedPnl={data.unrealizedPnl}
               lastTradeDate={data.lastTradeDate}
+              asOf={asOf}
             />
           </Suspense>
         </div>

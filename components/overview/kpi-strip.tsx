@@ -6,6 +6,7 @@ type KpiStripProps = {
   totalReturn: number | null
   winRate: number | null
   totalTrades: number
+  asOf?: string
 }
 
 function formatCurrency(value: number): string {
@@ -60,6 +61,7 @@ export function KpiStrip({
   totalReturn,
   winRate,
   totalTrades,
+  asOf,
 }: KpiStripProps) {
   const winRateSubtext =
     totalTrades === 0
@@ -69,6 +71,10 @@ export function KpiStrip({
         : `${totalTrades} trades`
 
   return (
+    <div className="space-y-2">
+      {asOf && (
+        <p className="text-xs text-muted-foreground">as of {asOf}</p>
+      )}
     <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
       <KpiCard
         label="Portfolio Value"
@@ -97,6 +103,7 @@ export function KpiStrip({
         value={winRate !== null ? `${(winRate * 100).toFixed(1)}%` : "--"}
         subtext={winRateSubtext}
       />
+    </div>
     </div>
   )
 }

@@ -10,6 +10,7 @@ type SystemSnapshotProps = {
   openPositions: number | null
   unrealizedPnl: number | null
   lastTradeDate: string | null
+  asOf?: string
 }
 
 function formatPnl(value: number): string {
@@ -45,11 +46,15 @@ export function SystemSnapshot({
   openPositions,
   unrealizedPnl,
   lastTradeDate,
+  asOf,
 }: SystemSnapshotProps) {
   return (
     <Card className="h-full">
       <CardHeader>
-        <CardTitle className="text-sm font-medium">System</CardTitle>
+        <div className="flex items-baseline gap-2">
+          <CardTitle className="text-sm font-medium">System</CardTitle>
+          {asOf && <span className="text-xs text-muted-foreground font-normal">as of {asOf}</span>}
+        </div>
       </CardHeader>
       <CardContent>
         <div className="divide-y divide-border">

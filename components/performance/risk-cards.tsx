@@ -6,6 +6,7 @@ type RiskCardsProps = {
   sortino: number | null
   maxDrawdownPct: number | null
   insufficientData: boolean
+  asOf?: string
 }
 
 type RiskCardProps = {
@@ -69,10 +70,15 @@ export function RiskCards({
   sortino,
   maxDrawdownPct,
   insufficientData,
+  asOf,
 }: RiskCardsProps) {
   const insufficientNote = "Insufficient trade history"
 
   return (
+    <div className="space-y-2">
+      {asOf && (
+        <p className="text-xs text-muted-foreground">as of {asOf}</p>
+      )}
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
       <RiskCard
         label="Sharpe Ratio"
@@ -108,6 +114,7 @@ export function RiskCards({
           maxDrawdownPct !== null && maxDrawdownPct > 0 ? "red" : "default"
         }
       />
+    </div>
     </div>
   )
 }

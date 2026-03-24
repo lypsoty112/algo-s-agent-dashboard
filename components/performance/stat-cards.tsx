@@ -14,6 +14,7 @@ type StatCardsProps = {
   maxDrawdownTroughDate: string | null
   // Trade metrics
   stats: TradeStatistics | null
+  asOf?: string
 }
 
 function fmt(v: number | null, formatter: (n: number) => string, fallback = "--"): string {
@@ -66,6 +67,7 @@ export function StatCards({
   maxDrawdownPeakDate,
   maxDrawdownTroughDate,
   stats,
+  asOf,
 }: StatCardsProps) {
   const ddLabel =
     maxDrawdownPeakDate && maxDrawdownTroughDate
@@ -77,7 +79,10 @@ export function StatCards({
       {/* Return metrics */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Returns</CardTitle>
+          <div className="flex items-baseline gap-2">
+            <CardTitle className="text-sm font-medium">Returns</CardTitle>
+            {asOf && <span className="text-xs text-muted-foreground font-normal">as of {asOf}</span>}
+          </div>
         </CardHeader>
         <CardContent className="divide-y divide-border">
           <StatRow
@@ -139,7 +144,10 @@ export function StatCards({
       {/* Trade metrics */}
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium">Trades</CardTitle>
+          <div className="flex items-baseline gap-2">
+            <CardTitle className="text-sm font-medium">Trades</CardTitle>
+            {asOf && <span className="text-xs text-muted-foreground font-normal">as of {asOf}</span>}
+          </div>
         </CardHeader>
         <CardContent className="divide-y divide-border">
           <StatRow

@@ -85,6 +85,7 @@ async function alpacaFetch<T>(
 	console.log(`[alpaca] → GET ${url.toString()}`);
 
 	const res = await fetch(url.toString(), {
+		cache: "no-store",
 		headers: {
 			"APCA-API-KEY-ID": keyId,
 			"APCA-API-SECRET-KEY": secretKey,

@@ -28,7 +28,7 @@ export function OverviewClient({ portfolio }: OverviewClientProps) {
 
     const startDate = new Date(firstTs * 1000).toISOString().slice(0, 10)
 
-    fetch(`/api/benchmark?start=${startDate}`)
+    fetch(`/api/benchmark?start=${startDate}`, { cache: "no-store" })
       .then((r) => {
         if (!r.ok) throw new Error("Benchmark fetch failed")
         return r.json() as Promise<BenchmarkData>

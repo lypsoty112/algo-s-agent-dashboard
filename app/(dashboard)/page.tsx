@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 async function getOverviewData() {
   "use cache"
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 })
+  cacheLife("frequent")
 
   const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
 

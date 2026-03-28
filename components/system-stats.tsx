@@ -16,7 +16,6 @@ type SystemStats = {
 };
 
 async function fetchSystemStats(): Promise<SystemStats> {
-  console.log("[fetchSystemStats] called (uncached)");
   const oneMonthAgo = new Date();
   oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
@@ -58,14 +57,12 @@ async function fetchSystemStats(): Promise<SystemStats> {
     agentRunsLastMonth: agentRunsLastMonth.data ?? null,
     isLive: liveStatus.live,
   };
-  console.log("[fetchSystemStats] returning:", JSON.stringify(result));
   return result;
 }
 
 async function getSystemStats(): Promise<SystemStats> {
   "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
-  console.log("[getSystemStats] cache miss — fetching fresh");
+  cacheLife("frequent");
   return fetchSystemStats();
 }
 
@@ -87,20 +84,9 @@ function fmtPct(value: number | null | undefined): string {
 }
 
 export async function StatsPanel() {
-  const noCache = process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production";
-  console.log("[StatsPanel] rendering, DISABLE_CACHE:", noCache);
   await connection();
   const { totalPnlPct, closedOrders, kbEntries, strategies, lastAgentRun, agentRunsLastMonth, isLive } =
-    await (noCache ? fetchSystemStats() : getSystemStats());
-  console.log("[StatsPanel] stats received:", {
-    totalPnlPct,
-    closedOrders,
-    kbEntries,
-    strategies,
-    lastAgentRun,
-    agentRunsLastMonth,
-    isLive,
-  });
+    await getSystemStats();
 
   const pnlPositive = totalPnlPct != null && totalPnlPct >= 0;
 

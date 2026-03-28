@@ -3,9 +3,6 @@ import { cacheLife } from "next/cache";
 import { db, safeQuery } from "@/lib/db";
 
 async function fetchRationale(symbol: string, after: string | null) {
-  "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
-
   // Try to find the closest record at or after the given date
   if (after) {
     const { data } = await safeQuery(() =>
@@ -33,6 +30,12 @@ async function fetchRationale(symbol: string, after: string | null) {
   };
 }
 
+async function getCachedRationale(symbol: string, after: string | null) {
+  "use cache";
+  cacheLife("frequent");
+  return fetchRationale(symbol, after);
+}
+
 export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams;
   const symbol = sp.get("symbol");
@@ -43,7 +46,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const data = await fetchRationale(symbol.toUpperCase(), after);
+    const data = await getCachedRationale(symbol.toUpperCase(), after);
     return Response.json(data);
   } catch (err) {
     console.error("Rationale route error:", err);

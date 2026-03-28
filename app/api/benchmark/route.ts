@@ -23,9 +23,9 @@ async function fetchBenchmarkData(start: string) {
   };
 }
 
-async function getBenchmarkData(start: string) {
+async function getCachedBenchmarkData(start: string) {
   "use cache";
-  cacheLife({ stale: 300, revalidate: 300, expire: 3600 });
+  cacheLife("infrequent");
   return fetchBenchmarkData(start);
 }
 
@@ -37,9 +37,7 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const data = await (process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-      ? fetchBenchmarkData(start)
-      : getBenchmarkData(start));
+    const data = await getCachedBenchmarkData(start);
     return Response.json(data);
   } catch (err) {
     console.error("Benchmark route error:", err);

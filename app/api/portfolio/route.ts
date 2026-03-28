@@ -16,17 +16,12 @@ async function fetchPortfolioData() {
   };
 }
 
-async function getPortfolioData() {
-  "use cache";
-  cacheLife({ stale: 300, revalidate: 300, expire: 3600 });
-  return fetchPortfolioData();
-}
-
 export async function GET() {
+  "use cache";
+  cacheLife("infrequent");
+
   try {
-    const data = await (process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-      ? fetchPortfolioData()
-      : getPortfolioData());
+    const data = await fetchPortfolioData();
     return Response.json(data);
   } catch (err) {
     console.error("Portfolio route error:", err);

@@ -1,19 +1,12 @@
 import { cacheLife } from "next/cache";
 import { checkIsLive } from "@/lib/system-status";
 
-async function getSystemStatus() {
-  "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
-  return checkIsLive();
-}
-
 export async function GET() {
+  "use cache";
+  cacheLife("frequent");
+
   try {
-    const data = await (
-      process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-        ? checkIsLive()
-        : getSystemStatus()
-    );
+    const data = await checkIsLive();
     return Response.json({
       live: data.live,
       lastActivityAt: data.lastActivityAt?.toISOString() ?? null,

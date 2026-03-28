@@ -63,7 +63,7 @@ async function fetchKnowledgeBaseData(
   };
 }
 
-async function getKnowledgeBaseData(
+async function getCachedKnowledgeBaseData(
   page: number,
   categories: string[],
   from: string | null,
@@ -72,7 +72,7 @@ async function getKnowledgeBaseData(
   q: string | null
 ) {
   "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
+  cacheLife("frequent");
   return fetchKnowledgeBaseData(page, categories, from, to, subject, q);
 }
 
@@ -90,9 +90,7 @@ export async function GET(req: NextRequest) {
   const q = sp.get("q");
 
   try {
-    const data = await (process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-      ? fetchKnowledgeBaseData(page, categories, from, to, subject, q)
-      : getKnowledgeBaseData(page, categories, from, to, subject, q));
+    const data = await getCachedKnowledgeBaseData(page, categories, from, to, subject, q);
     return Response.json(data);
   } catch (err) {
     console.error("Knowledge base route error:", err);

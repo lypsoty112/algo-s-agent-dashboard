@@ -69,7 +69,7 @@ async function fetchTradesData(
   };
 }
 
-async function getTradesData(
+async function getCachedTradesData(
   page: number,
   symbol: string | null,
   from: string | null,
@@ -77,7 +77,7 @@ async function getTradesData(
   outcome: string | null
 ) {
   "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
+  cacheLife("frequent");
   return fetchTradesData(page, symbol, from, to, outcome);
 }
 
@@ -91,9 +91,7 @@ export async function GET(req: NextRequest) {
   const outcome = sp.get("outcome");
 
   try {
-    const data = await (process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-      ? fetchTradesData(page, symbol, from, to, outcome)
-      : getTradesData(page, symbol, from, to, outcome));
+    const data = await getCachedTradesData(page, symbol, from, to, outcome);
     return Response.json(data);
   } catch (err) {
     console.error("Trades route error:", err);

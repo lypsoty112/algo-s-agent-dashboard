@@ -9,7 +9,7 @@ import type { ClosedTrade } from "@/components/positions/positions-client";
 
 async function getPositionsPageData() {
   "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
+  cacheLife("frequent");
 
   const [positionsResult, accountResult, ordersResult] =
     await Promise.allSettled([

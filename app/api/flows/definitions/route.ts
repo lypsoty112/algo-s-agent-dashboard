@@ -128,19 +128,12 @@ async function fetchDefinitions() {
   };
 }
 
-async function getCachedDefinitions() {
-  "use cache";
-  cacheLife({ stale: 300, revalidate: 300, expire: 600 });
-  return fetchDefinitions();
-}
-
 export async function GET() {
+  "use cache";
+  cacheLife("infrequent");
+
   try {
-    const data = await (
-      process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-        ? fetchDefinitions()
-        : getCachedDefinitions()
-    );
+    const data = await fetchDefinitions();
     return Response.json(data);
   } catch (err) {
     console.error("Flow definitions route error:", err);

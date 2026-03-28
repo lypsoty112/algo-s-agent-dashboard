@@ -51,17 +51,12 @@ async function fetchPositionsData() {
   };
 }
 
-async function getPositionsData() {
-  "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
-  return fetchPositionsData();
-}
-
 export async function GET() {
+  "use cache";
+  cacheLife("frequent");
+
   try {
-    const data = await (process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-      ? fetchPositionsData()
-      : getPositionsData());
+    const data = await fetchPositionsData();
     return Response.json(data);
   } catch (err) {
     console.error("Positions route error:", err);

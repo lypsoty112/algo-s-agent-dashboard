@@ -48,14 +48,14 @@ async function fetchStrategiesData(
   return { strategies, total: strategies.length };
 }
 
-async function getStrategiesData(
+async function getCachedStrategiesData(
   type: string | null,
   subject: string | null,
   q: string | null,
   showSuperseded: boolean
 ) {
   "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
+  cacheLife("frequent");
   return fetchStrategiesData(type, subject, q, showSuperseded);
 }
 
@@ -67,9 +67,7 @@ export async function GET(req: NextRequest) {
   const showSuperseded = sp.get("showSuperseded") === "true";
 
   try {
-    const data = await (process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-      ? fetchStrategiesData(type, subject, q, showSuperseded)
-      : getStrategiesData(type, subject, q, showSuperseded));
+    const data = await getCachedStrategiesData(type, subject, q, showSuperseded);
     return Response.json(data);
   } catch (err) {
     console.error("Strategies route error:", err);

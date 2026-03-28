@@ -39,9 +39,9 @@ async function fetchFlowsData(page: number, status: string | null) {
   };
 }
 
-async function getFlowsData(page: number, status: string | null) {
+async function getCachedFlowsData(page: number, status: string | null) {
   "use cache";
-  cacheLife({ stale: 60, revalidate: 60, expire: 300 });
+  cacheLife("frequent");
   return fetchFlowsData(page, status);
 }
 
@@ -52,11 +52,7 @@ export async function GET(req: NextRequest) {
   const status = sp.get("status");
 
   try {
-    const data = await (
-      process.env.DISABLE_CACHE === "true" && process.env.NODE_ENV !== "production"
-        ? fetchFlowsData(page, status)
-        : getFlowsData(page, status)
-    );
+    const data = await getCachedFlowsData(page, status);
     return Response.json(data);
   } catch (err) {
     console.error("Flows route error:", err);

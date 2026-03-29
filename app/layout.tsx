@@ -20,7 +20,7 @@ const fontMono = DM_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "algo-s — Investor Dashboard",
+    default: "Algo-s",
     template: "%s · algo-s",
   },
   description:

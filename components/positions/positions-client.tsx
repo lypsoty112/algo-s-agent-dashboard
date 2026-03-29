@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import {
   Table,
@@ -184,15 +185,15 @@ function DrawerBody({ item }: { item: DrawerItem }) {
           <div className="flex flex-wrap gap-2">
             <Link
               href={`/knowledge-base?q=${encodeURIComponent(p.symbol)}`}
-              className={buttonVariants({ variant: "outline", size: "sm" })}
+              className={buttonVariants({ variant: "default", size: "sm" }) + " bg-zinc-900 hover:bg-zinc-700"}
             >
-              View in Knowledge Base
+              View in Knowledge Base <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Link>
             <Link
               href={`/strategies?subject=${encodeURIComponent(p.symbol)}`}
-              className={buttonVariants({ variant: "outline", size: "sm" })}
+              className={buttonVariants({ variant: "default", size: "sm" }) + " bg-zinc-900 hover:bg-zinc-700"}
             >
-              View in Strategies
+              View in Strategies <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Link>
           </div>
         </div>
@@ -229,15 +230,15 @@ function DrawerBody({ item }: { item: DrawerItem }) {
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/knowledge-base?q=${encodeURIComponent(t.symbol)}`}
-            className={buttonVariants({ variant: "outline", size: "sm" })}
+            className={buttonVariants({ variant: "default", size: "sm" }) + " bg-zinc-900 hover:bg-zinc-700"}
           >
-            View in Knowledge Base
+            View in Knowledge Base <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
           <Link
             href={`/strategies?subject=${encodeURIComponent(t.symbol)}`}
-            className={buttonVariants({ variant: "outline", size: "sm" })}
+            className={buttonVariants({ variant: "default", size: "sm" }) + " bg-zinc-900 hover:bg-zinc-700"}
           >
-            View in Strategies
+            View in Strategies <ArrowRight className="ml-1 h-3.5 w-3.5" />
           </Link>
         </div>
       </div>

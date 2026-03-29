@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -76,15 +77,15 @@ export function StrategyDrawer({ strategy, onClose }: StrategyDrawerProps) {
               <div className="flex flex-wrap gap-2">
                 <Link
                   href={`/knowledge-base?q=${encodeURIComponent(strategy.subject)}`}
-                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                  className={buttonVariants({ variant: "default", size: "sm" }) + " bg-zinc-900 hover:bg-zinc-700"}
                 >
-                  View in Knowledge Base
+                  View in Knowledge Base <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </Link>
                 <Link
                   href="/positions"
-                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                  className={buttonVariants({ variant: "default", size: "sm" }) + " bg-zinc-900 hover:bg-zinc-700"}
                 >
-                  View in Positions
+                  View in Positions <ArrowRight className="ml-1 h-3.5 w-3.5" />
                 </Link>
               </div>
             </div>

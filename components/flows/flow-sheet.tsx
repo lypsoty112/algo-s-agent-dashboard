@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   Sheet,
   SheetContent,
@@ -10,6 +11,8 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFlowDetail } from "@/hooks/use-flow-detail";
+import { extractTodos } from "@/lib/extract-todos";
+import { TodoPanel } from "./todo-panel";
 
 const STATUS_BADGE: Record<string, string> = {
   completed: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
@@ -65,6 +68,11 @@ export function FlowSheet({
 }) {
   const { flowRun, agentRuns, loading, error } = useFlowDetail(id);
 
+  const todos = useMemo(
+    () => (flowRun ? extractTodos(flowRun, agentRuns) : []),
+    [flowRun, agentRuns]
+  );
+
   return (
     <Sheet open={!!id} onOpenChange={(open) => !open && onClose()}>
       <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto">
@@ -91,6 +99,12 @@ export function FlowSheet({
           <p className="px-4 py-8 text-center text-sm text-muted-foreground">
             {error}
           </p>
+        )}
+
+        {!loading && !error && todos.length > 0 && (
+          <div className="px-4 pb-2">
+            <TodoPanel todos={todos} />
+          </div>
         )}
 
         {!loading && !error && agentRuns.length > 0 && (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -19,7 +19,9 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useFlowDetail } from "@/hooks/use-flow-detail";
 import { buildGraph, layoutGraph } from "@/lib/flow-graph";
+import { extractTodos } from "@/lib/extract-todos";
 import { AgentNode } from "./agent-node";
+import { TodoPanel } from "./todo-panel";
 
 const STATUS_BADGE: Record<string, string> = {
   completed: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400",
@@ -87,6 +89,11 @@ export function FlowCanvas({
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [layoutReady, setLayoutReady] = useState(false);
 
+  const todos = useMemo(
+    () => (flowRun ? extractTodos(flowRun, agentRuns) : []),
+    [flowRun, agentRuns]
+  );
+
   // Build and layout graph when data arrives
   useEffect(() => {
     if (!flowRun || agentRuns.length === 0) return;
@@ -141,6 +148,7 @@ export function FlowCanvas({
       </div>
 
       {/* Canvas */}
+      <div className="flex-1 flex overflow-hidden">
       <div className="flex-1 relative">
         {loading && <CanvasSkeleton />}
 
@@ -179,6 +187,13 @@ export function FlowCanvas({
             />
           </ReactFlow>
         )}
+      </div>
+
+      {todos.length > 0 && (
+        <div className="w-72 shrink-0 border-l border-border p-4 overflow-y-auto">
+          <TodoPanel todos={todos} />
+        </div>
+      )}
       </div>
     </div>
   );

@@ -11,19 +11,18 @@ async function fetchPositionsData() {
 
   const symbols = alpacaPositions.map((p) => p.symbol);
 
-  // Find the most recent buy order rationale per symbol (open position = we bought and haven't sold)
+  // Find the most recent opening order rationale per symbol (buy for longs, sell_short for shorts)
   const { data: tradeRows } = await safeQuery(() =>
     db.tradeHistory.findMany({
       where: {
         symbol: { in: symbols },
-        orderType: "buy",
         deletedAt: null,
       },
       orderBy: { createdAt: "desc" },
     })
   );
 
-  // Build symbol → most-recent buy trade map
+  // Build symbol → most-recent trade map
   const rationaleMap = new Map<string, { id: string; rationale: string }>();
   for (const row of tradeRows ?? []) {
     if (!rationaleMap.has(row.symbol)) {

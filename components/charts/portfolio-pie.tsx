@@ -12,6 +12,7 @@ import {
 type Position = {
   symbol: string;
   market_value: number;
+  side?: string;
 };
 
 type PortfolioPieProps = {
@@ -34,7 +35,7 @@ const COLORS = [
 interface TooltipPayloadItem {
   name: string;
   value: number;
-  payload: { symbol: string; market_value: number; pct: number };
+  payload: { symbol: string; market_value: number; pct: number; side: string };
 }
 
 interface CustomTooltipProps {
@@ -47,16 +48,18 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   const item = payload[0].payload;
   return (
     <div className="rounded-md border border-border bg-background/95 px-3 py-2 text-xs shadow-md">
-      <p className="font-semibold text-foreground font-mono">{item.symbol}</p>
+      <p className="font-semibold text-foreground font-mono">
+        {item.symbol}{item.side === "short" ? " (short)" : ""}
+      </p>
       <p className="text-muted-foreground">
         {new Intl.NumberFormat("en-US", {
           style: "currency",
           currency: "USD",
           minimumFractionDigits: 0,
           maximumFractionDigits: 0,
-        }).format(item.market_value)}
+        }).format(Math.abs(item.market_value))}
       </p>
-      <p className="text-muted-foreground">{item.pct.toFixed(1)}% of portfolio</p>
+      <p className="text-muted-foreground">{item.pct.toFixed(1)}% of exposure</p>
     </div>
   );
 }
@@ -70,11 +73,13 @@ export function PortfolioPie({ positions }: PortfolioPieProps) {
     );
   }
 
-  const total = positions.reduce((sum, p) => sum + p.market_value, 0);
+  const total = positions.reduce((sum, p) => sum + Math.abs(p.market_value), 0);
   const data = positions.map((p) => ({
     symbol: p.symbol,
     market_value: p.market_value,
-    pct: total > 0 ? (p.market_value / total) * 100 : 0,
+    side: p.side,
+    absValue: Math.abs(p.market_value),
+    pct: total > 0 ? (Math.abs(p.market_value) / total) * 100 : 0,
   }));
 
   return (
@@ -82,7 +87,7 @@ export function PortfolioPie({ positions }: PortfolioPieProps) {
       <PieChart>
         <Pie
           data={data}
-          dataKey="market_value"
+          dataKey="absValue"
           nameKey="symbol"
           cx="50%"
           cy="50%"

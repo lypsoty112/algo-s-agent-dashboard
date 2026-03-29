@@ -164,10 +164,10 @@ function DrawerBody({ item }: { item: DrawerItem }) {
       <div className="flex flex-col gap-4 px-4 pb-6 overflow-y-auto">
         <div className="grid grid-cols-2 gap-3">
           <MetricRow label="Side" value={<Badge variant="secondary">{p.side}</Badge>} />
-          <MetricRow label="Quantity" value={p.qty} />
+          <MetricRow label="Quantity" value={Math.abs(parseFloat(p.qty))} />
           <MetricRow label="Avg Entry" value={fmtCurrency(p.avg_entry_price)} />
           <MetricRow label="Current Price" value={fmtCurrency(p.current_price)} />
-          <MetricRow label="Market Value" value={fmtCurrency(p.market_value, 0)} />
+          <MetricRow label="Market Value" value={fmtCurrency(Math.abs(p.market_value), 0)} />
           <MetricRow
             label="Unrealized P&L"
             value={<PlCell value={p.unrealized_pl} pct={p.unrealized_plpc} />}
@@ -295,7 +295,7 @@ export function PositionsClient({ positions, trades }: PositionsClientProps) {
                         {p.side}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right font-mono tabular-nums">{p.qty}</TableCell>
+                    <TableCell className="text-right font-mono tabular-nums">{Math.abs(parseFloat(p.qty))}</TableCell>
                     <TableCell className="text-right font-mono tabular-nums">
                       {fmtCurrency(p.avg_entry_price)}
                     </TableCell>
@@ -303,7 +303,7 @@ export function PositionsClient({ positions, trades }: PositionsClientProps) {
                       {fmtCurrency(p.current_price)}
                     </TableCell>
                     <TableCell className="text-right font-mono tabular-nums">
-                      {fmtCurrency(p.market_value, 0)}
+                      {fmtCurrency(Math.abs(p.market_value), 0)}
                     </TableCell>
                     <TableCell className="text-right">
                       <PlCell value={p.unrealized_pl} pct={p.unrealized_plpc} />

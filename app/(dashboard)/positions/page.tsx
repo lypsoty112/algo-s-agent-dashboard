@@ -34,19 +34,26 @@ async function getPositionsPageData() {
   const recentTrades = tradeRecords;
 
   // Compute summary values
+  // Use gross (absolute) market value so shorts don't deflate the total
   const totalMarketValue =
     positions.length > 0
-      ? positions.reduce((sum, p) => sum + parseFloat(p.market_value), 0)
+      ? positions.reduce((sum, p) => sum + Math.abs(parseFloat(p.market_value)), 0)
       : null;
   const totalUnrealizedPl =
     positions.length > 0
       ? positions.reduce((sum, p) => sum + parseFloat(p.unrealized_pl), 0)
       : null;
+  // Cost basis per position: |market_value - unrealized_pl| (works for both long and short)
+  const totalCostBasis =
+    positions.length > 0
+      ? positions.reduce(
+          (sum, p) => sum + Math.abs(parseFloat(p.market_value) - parseFloat(p.unrealized_pl)),
+          0
+        )
+      : null;
   const totalUnrealizedPlPct =
-    totalUnrealizedPl !== null &&
-    totalMarketValue !== null &&
-    totalMarketValue - totalUnrealizedPl > 0
-      ? totalUnrealizedPl / (totalMarketValue - totalUnrealizedPl)
+    totalUnrealizedPl !== null && totalCostBasis !== null && totalCostBasis > 0
+      ? totalUnrealizedPl / totalCostBasis
       : null;
   const buyingPower = account ? parseFloat(account.buying_power) : null;
 

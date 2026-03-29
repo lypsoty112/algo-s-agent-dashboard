@@ -128,12 +128,15 @@ async function fetchDefinitions() {
   };
 }
 
-export async function GET() {
+async function getCachedDefinitions() {
   "use cache";
   cacheLife("infrequent");
+  return fetchDefinitions();
+}
 
+export async function GET() {
   try {
-    const data = await fetchDefinitions();
+    const data = await getCachedDefinitions();
     return Response.json(data);
   } catch (err) {
     console.error("Flow definitions route error:", err);

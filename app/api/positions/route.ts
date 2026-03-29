@@ -51,12 +51,15 @@ async function fetchPositionsData() {
   };
 }
 
-export async function GET() {
+async function getCachedPositionsData() {
   "use cache";
   cacheLife("frequent");
+  return fetchPositionsData();
+}
 
+export async function GET() {
   try {
-    const data = await fetchPositionsData();
+    const data = await getCachedPositionsData();
     return Response.json(data);
   } catch (err) {
     console.error("Positions route error:", err);

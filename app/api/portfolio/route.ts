@@ -16,12 +16,15 @@ async function fetchPortfolioData() {
   };
 }
 
-export async function GET() {
+async function getCachedPortfolioData() {
   "use cache";
   cacheLife("infrequent");
+  return fetchPortfolioData();
+}
 
+export async function GET() {
   try {
-    const data = await fetchPortfolioData();
+    const data = await getCachedPortfolioData();
     return Response.json(data);
   } catch (err) {
     console.error("Portfolio route error:", err);

@@ -90,6 +90,7 @@ async function getPerformanceData() {
       ? (validEquities.at(-1)! - validEquities[0]) / validEquities[0]
       : null
 
+
   const ddPeakDate =
     validTimestamps.length > peakIndex
       ? formatDateFromTs(validTimestamps[peakIndex])
@@ -109,7 +110,7 @@ async function getPerformanceData() {
   let cumulative = 1
   const monthlyRows = portfolioMonthly.map((m) => {
     const isMtd = m.month === currentMonthKey
-    if (!isMtd) cumulative *= 1 + m.returnPct / 100
+    cumulative *= 1 + m.returnPct / 100
     const spy = spyMonthly.get(m.month) ?? null
     return {
       month: m.month,
@@ -121,22 +122,30 @@ async function getPerformanceData() {
     }
   })
 
-  const completedMonths = portfolioMonthly.filter((m) => m.month !== currentMonthKey)
+  const spyRows = monthlyRows.filter((r) => r.spyReturn !== null)
+  const spyTotalReturn = spyRows.length > 0
+    ? spyRows.reduce((a, r) => a + r.spyReturn!, 0)
+    : null
+  const deltaRows = monthlyRows.filter((r) => r.delta !== null)
+  const vsSpy = deltaRows.length > 0
+    ? deltaRows.reduce((a, r) => a + r.delta!, 0)
+    : null
+
   const bestMonth =
-    completedMonths.length > 0
-      ? Math.max(...completedMonths.map((m) => m.returnPct))
+    portfolioMonthly.length > 0
+      ? Math.max(...portfolioMonthly.map((m) => m.returnPct))
       : null
   const worstMonth =
-    completedMonths.length > 0
-      ? Math.min(...completedMonths.map((m) => m.returnPct))
+    portfolioMonthly.length > 0
+      ? Math.min(...portfolioMonthly.map((m) => m.returnPct))
       : null
   const avgMonthly =
-    completedMonths.length > 0
-      ? completedMonths.reduce((a, m) => a + m.returnPct, 0) / completedMonths.length
+    portfolioMonthly.length > 0
+      ? portfolioMonthly.reduce((a, m) => a + m.returnPct, 0) / portfolioMonthly.length
       : null
   const pctPositive =
-    completedMonths.length > 0
-      ? (completedMonths.filter((m) => m.returnPct > 0).length / completedMonths.length) * 100
+    portfolioMonthly.length > 0
+      ? (portfolioMonthly.filter((m) => m.returnPct > 0).length / portfolioMonthly.length) * 100
       : null
 
   // Trade stats
@@ -165,6 +174,8 @@ async function getPerformanceData() {
       ? { timestamps: validTimestamps, equities: validEquities }
       : null,
     totalReturn,
+    spyTotalReturn,
+    vsSpy,
     annualizedReturn: annRet,
     sharpe,
     sortino,
@@ -228,7 +239,11 @@ export default async function PerformancePage() {
           <CardTitle className="text-sm font-medium">Monthly Returns</CardTitle>
         </CardHeader>
         <CardContent>
-          <MonthlyReturnsTable rows={data.monthlyRows} />
+          <MonthlyReturnsTable
+            rows={data.monthlyRows}
+            spyTotalReturn={data.spyTotalReturn}
+            vsSpy={data.vsSpy}
+          />
         </CardContent>
       </Card>
 

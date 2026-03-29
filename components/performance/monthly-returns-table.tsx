@@ -19,6 +19,8 @@ type MonthRow = {
 
 type MonthlyReturnsTableProps = {
   rows: MonthRow[]
+  spyTotalReturn: number | null
+  vsSpy: number | null
 }
 
 function formatPct(v: number, sign = true): string {
@@ -41,21 +43,20 @@ function returnColor(v: number): string {
   return `text-red-${intensity > 0.5 ? "500" : "400"}`
 }
 
-export function MonthlyReturnsTable({ rows }: MonthlyReturnsTableProps) {
+export function MonthlyReturnsTable({ rows, spyTotalReturn, vsSpy }: MonthlyReturnsTableProps) {
   if (rows.length === 0) {
     return (
       <p className="text-sm text-muted-foreground">No monthly data available.</p>
     )
   }
 
-  const validMonths = rows.filter((r) => !r.isMtd)
   const avgReturn =
-    validMonths.length > 0
-      ? validMonths.reduce((a, r) => a + r.portfolioReturn, 0) / validMonths.length
+    rows.length > 0
+      ? rows.reduce((a, r) => a + r.portfolioReturn, 0) / rows.length
       : null
   const pctPositive =
-    validMonths.length > 0
-      ? (validMonths.filter((r) => r.portfolioReturn > 0).length / validMonths.length) * 100
+    rows.length > 0
+      ? (rows.filter((r) => r.portfolioReturn > 0).length / rows.length) * 100
       : null
 
   return (
@@ -101,25 +102,41 @@ export function MonthlyReturnsTable({ rows }: MonthlyReturnsTableProps) {
             </TableRow>
           ))}
         </TableBody>
-        {(avgReturn !== null || pctPositive !== null) && (
-          <TableFooter>
-            <TableRow className="border-border">
-              <TableCell className="text-xs text-muted-foreground">
-                {validMonths.length} months
-              </TableCell>
-              <TableCell
-                className={`text-right font-mono text-xs tabular-nums ${avgReturn !== null ? returnColor(avgReturn) : ""}`}
+        <TableFooter>
+          <TableRow className="border-border">
+            <TableCell className="text-xs text-muted-foreground">
+              {rows.length} months
+            </TableCell>
+            <TableCell
+              className={`text-right font-mono text-xs tabular-nums ${avgReturn !== null ? returnColor(avgReturn) : ""}`}
+            >
+              {avgReturn !== null ? `avg ${formatPct(avgReturn)}` : ""}
+            </TableCell>
+            <TableCell className="text-right text-xs tabular-nums">
+              <span className="block font-sans text-[10px] leading-tight text-muted-foreground">
+                Sum of monthly %
+              </span>
+              <span
+                className={`font-mono ${spyTotalReturn !== null ? returnColor(spyTotalReturn) : "text-muted-foreground"}`}
               >
-                {avgReturn !== null ? `avg ${formatPct(avgReturn)}` : ""}
-              </TableCell>
-              <TableCell />
-              <TableCell />
-              <TableCell className="text-right text-xs text-muted-foreground">
-                {pctPositive !== null ? `${pctPositive.toFixed(0)}% positive` : ""}
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        )}
+                {spyTotalReturn !== null ? formatPct(spyTotalReturn) : "--"}
+              </span>
+            </TableCell>
+            <TableCell className="text-right text-xs tabular-nums">
+              <span className="block font-sans text-[10px] leading-tight text-muted-foreground">
+                Sum of monthly vs SPY
+              </span>
+              <span
+                className={`font-mono ${vsSpy !== null ? returnColor(vsSpy) : "text-muted-foreground"}`}
+              >
+                {vsSpy !== null ? formatPct(vsSpy) : "--"}
+              </span>
+            </TableCell>
+            <TableCell className="text-right text-xs text-muted-foreground">
+              {pctPositive !== null ? `${pctPositive.toFixed(0)}% positive` : ""}
+            </TableCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </div>
   )

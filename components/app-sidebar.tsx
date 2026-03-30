@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, TrendingUp, Briefcase, GitBranch, BookOpen, Lightbulb, LogOut } from "lucide-react";
+import { LayoutDashboard, TrendingUp, Briefcase, GitBranch, BookOpen, Lightbulb, LogOut, ExternalLink } from "lucide-react";
 import logo from "@/images/algo-s-logo.png";
 import {
   Sidebar,
@@ -88,6 +88,16 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               );
             })}
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                  render={<a href="https://app.alpaca.markets/dashboard/overview" target="_blank" rel="noopener noreferrer" />}
+                  tooltip="Alpaca Dashboard"
+                  onClick={handleNavClick}
+                >
+                  <ExternalLink />
+                  <span>Alpaca</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>

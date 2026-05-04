@@ -328,9 +328,9 @@ export type FlowRunCreateInput = {
   id?: string
   flowName: string
   starterAgent: string
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   error?: string | null
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -342,9 +342,9 @@ export type FlowRunUncheckedCreateInput = {
   id?: string
   flowName: string
   starterAgent: string
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   error?: string | null
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -384,9 +384,9 @@ export type FlowRunCreateManyInput = {
   id?: string
   flowName: string
   starterAgent: string
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   error?: string | null
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -501,9 +501,9 @@ export type FlowRunCreateWithoutAgentRunsInput = {
   id?: string
   flowName: string
   starterAgent: string
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   error?: string | null
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -514,9 +514,9 @@ export type FlowRunUncheckedCreateWithoutAgentRunsInput = {
   id?: string
   flowName: string
   starterAgent: string
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   error?: string | null
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string

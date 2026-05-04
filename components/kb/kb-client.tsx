@@ -42,6 +42,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
   industry: "Industry",
   mistakes: "Mistakes",
   system: "System",
+  log: "Log",
   other: "Other",
 };
 
@@ -51,6 +52,7 @@ export const CATEGORY_COLORS: Record<string, string> = {
   industry: "bg-cat-industry text-cat-industry-fg",
   mistakes: "bg-cat-mistakes text-cat-mistakes-fg",
   system: "bg-cat-system text-cat-system-fg",
+  log: "bg-cat-log text-cat-log-fg",
   other: "bg-cat-other text-cat-other-fg",
 };
 

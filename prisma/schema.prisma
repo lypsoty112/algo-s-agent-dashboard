@@ -9,6 +9,19 @@ datasource db {
   provider = "postgresql"
 }
 
+// --- Flows (Section 2 & 5): flowStarter reads due flows; schedule, starter agent/prompt live in info JSON
+model Flow {
+  id         String    @id @default(uuid())
+  name       String    @map("name")
+  info       Json      @map("info") // schedule, starterAgent, starterPrompt, etc.
+  createdBy  String    @map("created_by") // "system" or agent ID
+  enabled    Boolean   @default(true)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@map("flows")
+}
+
 // --- Knowledge base (Section 5): Memory Manager Agent is sole writer
 model KnowledgeBase {
   id          String    @id @default(uuid())
@@ -29,6 +42,7 @@ enum KnowledgeBaseCategory {
   industry
   mistakes
   system
+  log
   other
 }
 
@@ -53,6 +67,7 @@ enum StrategyType {
   industry       // Thesis and rules for an industry or sector
   portfolio      // Overall portfolio construction and allocation rules
   risk_management // Risk limits, drawdown rules, exposure constraints
+  weekly_trading // Weekly-trader mode playbook: conviction bar, do-not-buy list, sizing, stop policy, lessons
   other          // Catch-all for strategies that don't fit the above
 }
 
@@ -106,27 +121,20 @@ enum AlpacaOrderType {
   trailing_stop
 }
 
-// --- Flow definitions: scheduled or one-off flow configurations
-model Flow {
-  id        String    @id @default(uuid())
-  name      String
-  info      Json
-  createdBy String    @map("created_by")
-  enabled   Boolean   @default(true)
-  createdAt DateTime  @default(now()) @map("created_at")
-  deletedAt DateTime? @map("deleted_at")
-
-  @@map("flows")
+// --- Run logging (Section 6): tracks flow and agent execution history
+enum RunStatus {
+  running
+  completed
+  failed
 }
 
-// --- Flow runs: execution log per flow invocation
 model FlowRun {
   id           String    @id @default(uuid())
   flowName     String    @map("flow_name")
   starterAgent String    @map("starter_agent")
-  status       RunStatus
+  status       RunStatus @default(running)
   error        String?   @db.Text
-  startedAt    DateTime  @map("started_at")
+  startedAt    DateTime  @default(now()) @map("started_at")
   endedAt      DateTime? @map("ended_at")
   durationMs   Int?      @map("duration_ms")
   createdAt    DateTime  @default(now()) @map("created_at")
@@ -137,20 +145,12 @@ model FlowRun {
   @@map("flow_runs")
 }
 
-enum RunStatus {
-  running
-  completed
-  failed
-}
-
-// --- Agent runs: per-agent execution log, child of flow_run
 model AgentRun {
   id               String    @id @default(uuid())
   flowRunId        String    @map("flow_run_id")
-  flowRun          FlowRun   @relation(fields: [flowRunId], references: [id])
   agentId          String    @map("agent_id")
   callerId         String?   @map("caller_id")
-  status           RunStatus
+  status           RunStatus @default(running)
   finishReason     String?   @map("finish_reason")
   error            String?   @db.Text
   stepCount        Int?      @map("step_count")
@@ -159,11 +159,13 @@ model AgentRun {
   input            String?   @db.Text
   outputSummary    String?   @map("output_summary") @db.Text
   steps            Json?
-  startedAt        DateTime  @map("started_at")
+  startedAt        DateTime  @default(now()) @map("started_at")
   endedAt          DateTime? @map("ended_at")
   durationMs       Int?      @map("duration_ms")
   createdAt        DateTime  @default(now()) @map("created_at")
   deletedAt        DateTime? @map("deleted_at")
+
+  flowRun          FlowRun   @relation(fields: [flowRunId], references: [id])
 
   @@map("agent_runs")
 }

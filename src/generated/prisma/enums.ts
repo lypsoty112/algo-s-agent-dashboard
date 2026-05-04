@@ -15,6 +15,7 @@ export const KnowledgeBaseCategory = {
   industry: 'industry',
   mistakes: 'mistakes',
   system: 'system',
+  log: 'log',
   other: 'other'
 } as const
 
@@ -26,6 +27,7 @@ export const StrategyType = {
   industry: 'industry',
   portfolio: 'portfolio',
   risk_management: 'risk_management',
+  weekly_trading: 'weekly_trading',
   other: 'other'
 } as const
 

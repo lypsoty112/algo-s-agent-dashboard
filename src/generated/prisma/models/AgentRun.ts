@@ -432,7 +432,7 @@ export type AgentRunCreateInput = {
   id?: string
   agentId: string
   callerId?: string | null
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   finishReason?: string | null
   error?: string | null
   stepCount?: number | null
@@ -441,7 +441,7 @@ export type AgentRunCreateInput = {
   input?: string | null
   outputSummary?: string | null
   steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -454,7 +454,7 @@ export type AgentRunUncheckedCreateInput = {
   flowRunId: string
   agentId: string
   callerId?: string | null
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   finishReason?: string | null
   error?: string | null
   stepCount?: number | null
@@ -463,7 +463,7 @@ export type AgentRunUncheckedCreateInput = {
   input?: string | null
   outputSummary?: string | null
   steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -517,7 +517,7 @@ export type AgentRunCreateManyInput = {
   flowRunId: string
   agentId: string
   callerId?: string | null
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   finishReason?: string | null
   error?: string | null
   stepCount?: number | null
@@ -526,7 +526,7 @@ export type AgentRunCreateManyInput = {
   input?: string | null
   outputSummary?: string | null
   steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -705,7 +705,7 @@ export type AgentRunCreateWithoutFlowRunInput = {
   id?: string
   agentId: string
   callerId?: string | null
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   finishReason?: string | null
   error?: string | null
   stepCount?: number | null
@@ -714,7 +714,7 @@ export type AgentRunCreateWithoutFlowRunInput = {
   input?: string | null
   outputSummary?: string | null
   steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -725,7 +725,7 @@ export type AgentRunUncheckedCreateWithoutFlowRunInput = {
   id?: string
   agentId: string
   callerId?: string | null
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   finishReason?: string | null
   error?: string | null
   stepCount?: number | null
@@ -734,7 +734,7 @@ export type AgentRunUncheckedCreateWithoutFlowRunInput = {
   input?: string | null
   outputSummary?: string | null
   steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string
@@ -795,7 +795,7 @@ export type AgentRunCreateManyFlowRunInput = {
   id?: string
   agentId: string
   callerId?: string | null
-  status: $Enums.RunStatus
+  status?: $Enums.RunStatus
   finishReason?: string | null
   error?: string | null
   stepCount?: number | null
@@ -804,7 +804,7 @@ export type AgentRunCreateManyFlowRunInput = {
   input?: string | null
   outputSummary?: string | null
   steps?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
-  startedAt: Date | string
+  startedAt?: Date | string
   endedAt?: Date | string | null
   durationMs?: number | null
   createdAt?: Date | string

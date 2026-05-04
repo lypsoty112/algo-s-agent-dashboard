@@ -52,6 +52,8 @@
     --cat-mistakes-fg: oklch(0.42 0.12 25);
     --cat-system: oklch(0.92 0.01 80);
     --cat-system-fg: oklch(0.42 0.02 80);
+    --cat-log: oklch(0.90 0.05 200);
+    --cat-log-fg: oklch(0.40 0.08 200);
     --cat-other: oklch(0.92 0.05 155);
     --cat-other-fg: oklch(0.42 0.08 155);
     --shadow-x: 0px;
@@ -119,6 +121,8 @@
     --cat-mistakes-fg: oklch(0.78 0.10 25);
     --cat-system: oklch(0.22 0.01 80);
     --cat-system-fg: oklch(0.70 0.02 80);
+    --cat-log: oklch(0.25 0.04 200);
+    --cat-log-fg: oklch(0.75 0.08 200);
     --cat-other: oklch(0.25 0.04 155);
     --cat-other-fg: oklch(0.75 0.08 155);
     --shadow-x: 0px;
@@ -181,6 +185,8 @@
     --color-cat-mistakes-fg: var(--cat-mistakes-fg);
     --color-cat-system: var(--cat-system);
     --color-cat-system-fg: var(--cat-system-fg);
+    --color-cat-log: var(--cat-log);
+    --color-cat-log-fg: var(--cat-log-fg);
     --color-cat-other: var(--cat-other);
     --color-cat-other-fg: var(--cat-other-fg);
 

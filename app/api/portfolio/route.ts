@@ -18,7 +18,7 @@ async function fetchPortfolioData() {
 
 async function getCachedPortfolioData() {
   "use cache";
-  cacheLife("infrequent");
+  cacheLife("hours");
   return fetchPortfolioData();
 }
 

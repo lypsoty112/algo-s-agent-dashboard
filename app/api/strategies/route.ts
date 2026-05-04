@@ -55,7 +55,7 @@ async function getCachedStrategiesData(
   showSuperseded: boolean
 ) {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchStrategiesData(type, subject, q, showSuperseded);
 }
 

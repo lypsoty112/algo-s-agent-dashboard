@@ -25,7 +25,7 @@ async function fetchBenchmarkData(start: string) {
 
 async function getCachedBenchmarkData(start: string) {
   "use cache";
-  cacheLife("infrequent");
+  cacheLife("hours");
   return fetchBenchmarkData(start);
 }
 

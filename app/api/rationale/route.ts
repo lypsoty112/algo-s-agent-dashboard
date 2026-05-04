@@ -32,7 +32,7 @@ async function fetchRationale(symbol: string, after: string | null) {
 
 async function getCachedRationale(symbol: string, after: string | null) {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchRationale(symbol, after);
 }
 

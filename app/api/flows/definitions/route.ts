@@ -130,7 +130,7 @@ async function fetchDefinitions() {
 
 async function getCachedDefinitions() {
   "use cache";
-  cacheLife("infrequent");
+  cacheLife("hours");
   return fetchDefinitions();
 }
 

@@ -62,7 +62,7 @@ async function fetchSystemStats(): Promise<SystemStats> {
 
 async function getSystemStats(): Promise<SystemStats> {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchSystemStats();
 }
 

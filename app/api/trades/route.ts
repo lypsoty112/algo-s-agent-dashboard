@@ -77,7 +77,7 @@ async function getCachedTradesData(
   outcome: string | null
 ) {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchTradesData(page, symbol, from, to, outcome);
 }
 

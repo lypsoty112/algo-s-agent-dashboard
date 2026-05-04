@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 import { cacheLife } from "next/cache";
-import { db, safeQuery } from "@/lib/db";
+import { db } from "@/lib/db";
 import { Prisma } from "@/src/generated/prisma/client";
 
 const PAGE_SIZE = 25;
@@ -44,20 +44,18 @@ async function fetchKnowledgeBaseData(
   const offset = (page - 1) * PAGE_SIZE;
 
   const [entries, total] = await Promise.all([
-    safeQuery(() =>
-      db.knowledgeBase.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        skip: offset,
-        take: PAGE_SIZE,
-      })
-    ),
-    safeQuery(() => db.knowledgeBase.count({ where })),
+    db.knowledgeBase.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      skip: offset,
+      take: PAGE_SIZE,
+    }),
+    db.knowledgeBase.count({ where }),
   ]);
 
   return {
-    entries: entries.data ?? [],
-    total: total.data ?? 0,
+    entries,
+    total,
     page,
     pageSize: PAGE_SIZE,
   };
@@ -72,7 +70,7 @@ async function getCachedKnowledgeBaseData(
   q: string | null
 ) {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchKnowledgeBaseData(page, categories, from, to, subject, q);
 }
 

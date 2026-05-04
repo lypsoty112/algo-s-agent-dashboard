@@ -3,7 +3,7 @@ import { checkIsLive } from "@/lib/system-status";
 
 async function getCachedSystemStatus() {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   const data = await checkIsLive();
   return {
     live: data.live,

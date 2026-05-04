@@ -48,7 +48,7 @@ function formatDateFromTs(ts: number): string {
 
 async function getPerformanceData() {
   "use cache"
-  cacheLife("frequent")
+  cacheLife("minutes")
 
   const oneYearAgo = new Date(Date.now() - 366 * 24 * 60 * 60 * 1000)
     .toISOString()

@@ -52,7 +52,7 @@ async function fetchPositionsData() {
 
 async function getCachedPositionsData() {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchPositionsData();
 }
 

@@ -41,7 +41,7 @@ async function fetchFlowsData(page: number, status: string | null) {
 
 async function getCachedFlowsData(page: number, status: string | null) {
   "use cache";
-  cacheLife("frequent");
+  cacheLife("minutes");
   return fetchFlowsData(page, status);
 }
 
